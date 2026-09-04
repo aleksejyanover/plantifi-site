@@ -5,869 +5,159 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlantiFi — Мир растений</title>
   <style>:root {
-  --bg: #0f1a0f;
-  --bg2: #162016;
-  --bg3: #1e2e1e;
-  --surface: #1a2b1a;
-  --surface2: #223322;
-  --primary: #4caf50;
-  --primary-dark: #388e3c;
-  --primary-light: #81c784;
-  --accent: #8bc34a;
-  --text: #e8f5e9;
-  --text-dim: #a5d6a7;
-  --text-muted: #66bb6a;
-  --danger: #ef5350;
-  --warning: #ffb74d;
-  --border: #2e4a2e;
-  --shadow: rgba(0,0,0,0.3);
-  --radius: 12px;
-  --radius-sm: 8px;
-}
-
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.6;
-}
-
-/* NAVBAR */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.8rem 2rem;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-}
-
-.nav-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-light);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo { font-size: 1.8rem; }
-
-.nav-links {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.nav-link {
-  padding: 0.5rem 1rem;
-  color: var(--text-dim);
-  text-decoration: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-}
-
-.nav-link:hover { background: var(--surface); color: var(--text); }
-.nav-link.active { background: var(--primary-dark); color: white; }
-
-.nav-user {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.btn-auth {
-  padding: 0.4rem 1rem;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: background 0.2s;
-}
-.btn-auth:hover { background: var(--primary-dark); }
-
-.hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
-
-/* MAIN */
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 1rem 2rem 4rem;
-}
-
-.section { animation: fadeIn 0.3s ease; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hidden { display: none !important; }
-
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 3rem 1rem 2rem;
-}
-
-.hero h1 {
-  font-size: 2.5rem;
-  background: linear-gradient(135deg, var(--primary-light), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
-}
-
-.hero p {
-  color: var(--text-dim);
-  font-size: 1.1rem;
-}
-
-/* FILTERS */
-.filters {
-  margin-bottom: 2rem;
-}
-
-.search-field {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto 1rem;
-  display: block;
-}
-
-.filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.filter-tag {
-  padding: 0.4rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.85rem;
-}
-.filter-tag:hover { border-color: var(--primary); color: var(--text); }
-.filter-tag.active { background: var(--primary-dark); color: white; border-color: var(--primary-dark); }
-
-/* INPUTS */
-.input-field {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: 0.95rem;
-  margin-bottom: 0.8rem;
-  transition: border-color 0.2s;
-}
-.input-field:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-textarea.input-field { resize: vertical; font-family: inherit; }
-
-select.input-field { cursor: pointer; }
-select.input-field option { background: var(--bg2); color: var(--text); }
-
-/* BUTTONS */
-.btn {
-  padding: 0.6rem 1.5rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-}
-.btn:hover { background: var(--surface2); }
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-.btn-primary:hover { background: var(--primary-dark); }
-
-.btn-danger { background: var(--danger); color: white; border-color: var(--danger); }
-.btn-sm { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
-
-/* PLANT GRID */
-.plant-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.plant-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-}
-.plant-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--primary);
-  box-shadow: 0 8px 30px var(--shadow);
-}
-
-.plant-card-img {
-  height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 5rem;
-  background: var(--bg3);
-  position: relative;
-}
-
-.plant-card-category {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  padding: 0.2rem 0.6rem;
-  background: var(--primary-dark);
-  color: white;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-}
-
-.plant-card-body {
-  padding: 1rem;
-}
-
-.plant-card-body h3 {
-  margin-bottom: 0.3rem;
-  color: var(--primary-light);
-}
-
-.plant-card-body p {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.plant-card-meta {
-  display: flex;
-  gap: 0.8rem;
-  margin-top: 0.8rem;
-  padding-top: 0.8rem;
-  border-top: 1px solid var(--border);
-}
-
-.plant-meta-item {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.plant-difficulty {
-  display: flex;
-  gap: 2px;
-  margin-top: 0.3rem;
-}
-
-.diff-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--border);
-}
-.diff-dot.filled { background: var(--primary); }
-
-/* PLANT DETAIL */
-.plant-detail { padding: 0.5rem; }
-
-.plant-detail-header {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  align-items: flex-start;
-}
-
-.plant-detail-emoji {
-  font-size: 6rem;
-  min-width: 150px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg3);
-  border-radius: var(--radius);
-}
-
-.plant-detail-info h1 {
-  font-size: 2rem;
-  color: var(--primary-light);
-  margin-bottom: 0.3rem;
-}
-
-.plant-detail-info .latin {
-  color: var(--text-muted);
-  font-style: italic;
-  margin-bottom: 1rem;
-}
-
-.plant-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
-}
-
-.plant-tag {
-  padding: 0.2rem 0.6rem;
-  background: var(--bg3);
-  border-radius: 12px;
-  font-size: 0.75rem;
-  color: var(--text-dim);
-}
-
-.plant-detail-tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
-}
-
-.detail-tab {
-  padding: 0.5rem 1rem;
-  background: none;
-  border: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  transition: all 0.2s;
-}
-.detail-tab:hover { color: var(--text); }
-.detail-tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
-
-.detail-content { line-height: 1.8; }
-.detail-content h3 { color: var(--primary-light); margin: 1rem 0 0.5rem; }
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.info-card {
-  background: var(--bg3);
-  padding: 1rem;
-  border-radius: var(--radius-sm);
-  text-align: center;
-}
-.info-card .icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
-.info-card .label { font-size: 0.75rem; color: var(--text-muted); }
-.info-card .value { font-size: 0.95rem; color: var(--text); font-weight: 600; }
-
-.tip-box {
-  background: var(--bg3);
-  border-left: 3px solid var(--accent);
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-}
-
-.tip-box.warning { border-left-color: var(--warning); }
-.tip-box.danger { border-left-color: var(--danger); }
-
-.propose-btn {
-  margin-top: 1rem;
-}
-
-/* JOURNAL */
-.journal-form {
-  max-width: 700px;
-  margin-bottom: 2rem;
-}
-
-.journal-photos { margin-bottom: 0.8rem; }
-.photo-upload {
-  padding: 0.5rem 1rem;
-  background: var(--surface);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  color: var(--text-dim);
-  display: inline-block;
-  transition: border-color 0.2s;
-}
-.photo-upload:hover { border-color: var(--primary); }
-
-.photo-preview {
-  max-width: 200px;
-  max-height: 150px;
-  border-radius: var(--radius-sm);
-  margin-top: 0.5rem;
-  object-fit: cover;
-}
-
-.journal-mood {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.mood-btn {
-  width: 40px;
-  height: 40px;
-  font-size: 1.3rem;
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.mood-btn:hover, .mood-btn.active {
-  border-color: var(--primary);
-  transform: scale(1.1);
-}
-
-.journal-entries { display: flex; flex-direction: column; gap: 1rem; }
-
-.journal-entry {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  position: relative;
-}
-
-.journal-entry-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.journal-entry-date {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.journal-entry-plant {
-  font-weight: 600;
-  color: var(--primary-light);
-}
-
-.journal-entry-mood { font-size: 1.2rem; }
-
-.journal-entry-text {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-}
-
-.journal-entry-photo {
-  max-width: 100%;
-  max-height: 300px;
-  border-radius: var(--radius-sm);
-  margin-top: 0.5rem;
-}
-
-.journal-entry-actions {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* NOTES */
-.notes-form {
-  max-width: 700px;
-  margin-bottom: 2rem;
-}
-
-.note-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.notes-list { display: flex; flex-direction: column; gap: 1rem; }
-
-.note-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-}
-
-.note-card h3 {
-  color: var(--accent);
-  margin-bottom: 0.3rem;
-}
-
-.note-card p {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-}
-
-.note-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.note-date { font-size: 0.8rem; color: var(--text-muted); }
-
-.note-badge {
-  padding: 0.15rem 0.5rem;
-  border-radius: 10px;
-  font-size: 0.7rem;
-}
-.note-badge.public { background: var(--primary-dark); color: white; }
-.note-badge.proposed { background: var(--warning); color: #333; }
-
-/* PROPOSALS */
-.admin-toggle {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-}
-
-.proposals-list { display: flex; flex-direction: column; gap: 1rem; }
-
-.proposal-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-}
-
-.proposal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.proposal-status {
-  padding: 0.2rem 0.7rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.proposal-status.pending { background: #f39c12; color: #333; }
-.proposal-status.approved { background: #27ae60; color: white; }
-.proposal-status.rejected { background: #c0392b; color: white; }
-
-.proposal-body {
-  margin: 0.5rem 0;
-}
-
-.proposal-field {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  margin-bottom: 0.2rem;
-}
-
-.proposal-text {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  padding: 0.8rem;
-  background: var(--bg3);
-  border-radius: var(--radius-sm);
-  white-space: pre-wrap;
-}
-
-.proposal-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-}
-
-.proposal-author {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-/* CALENDAR */
-.calendar-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.3rem;
-  margin-bottom: 2rem;
-}
-
-.cal-header {
-  text-align: center;
-  padding: 0.5rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-}
-
-.cal-day {
-  aspect-ratio: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-  gap: 2px;
-  min-height: 60px;
-}
-.cal-day:hover { border-color: var(--primary); }
-.cal-day.today { border-color: var(--accent); background: var(--bg3); }
-.cal-day.empty { opacity: 0.3; cursor: default; }
-.cal-day.selected { background: var(--primary-dark); }
-
-.cal-day-events {
-  display: flex;
-  gap: 2px;
-}
-.cal-day-event {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.calendar-event-form {
-  max-width: 500px;
-  background: var(--surface);
-  padding: 1.5rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-
-.calendar-events h3 {
-  color: var(--primary-light);
-  margin-bottom: 1rem;
-}
-
-.cal-event {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.8rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  margin-bottom: 0.5rem;
-}
-
-.cal-event-icon { font-size: 1.3rem; }
-.cal-event-info { flex: 1; }
-.cal-event-plant { font-weight: 600; color: var(--primary-light); }
-.cal-event-note { font-size: 0.85rem; color: var(--text-dim); }
-
-/* COMMUNITY */
-.community-form {
-  max-width: 700px;
-  margin-bottom: 2rem;
-}
-
-.community-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.community-feed { display: flex; flex-direction: column; gap: 1rem; }
-
-.post-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.2rem;
-}
-
-.post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.8rem;
-}
-
-.post-author {
-  font-weight: 600;
-  color: var(--primary-light);
-}
-
-.post-category-badge {
-  padding: 0.15rem 0.6rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-}
-
-.post-text {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  margin-bottom: 0.8rem;
-  white-space: pre-wrap;
-}
-
-.post-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.post-date { font-size: 0.8rem; color: var(--text-muted); }
-
-.post-actions {
-  display: flex;
-  gap: 0.8rem;
-}
-
-.post-action {
-  background: none;
-  border: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  transition: color 0.2s;
-}
-.post-action:hover { color: var(--primary); }
-
-/* MODAL */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem;
-  max-width: 500px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.modal-large {
-  max-width: 800px;
-}
-
-.close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 1.5rem;
-  color: var(--text-dim);
-  cursor: pointer;
-  z-index: 10;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background 0.2s;
-}
-.close:hover { background: var(--surface); }
-
-.auth-switch {
-  text-align: center;
-  margin-top: 1rem;
-  color: var(--text-dim);
-}
-.auth-switch a { color: var(--primary); cursor: pointer; }
-
-/* FOOTER */
-.footer {
-  text-align: center;
-  padding: 2rem;
-  border-top: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .navbar { padding: 0.8rem 1rem; flex-wrap: wrap; }
-  .nav-links { display: none; flex-direction: column; width: 100%; padding-top: 0.5rem; }
-  .nav-links.show { display: flex; }
-  .nav-user { display: none; }
-  .hamburger { display: block; }
-  .container { padding: 1rem; }
-  .hero h1 { font-size: 1.8rem; }
-  .plant-detail-header { flex-direction: column; align-items: center; text-align: center; }
-  .plant-detail-emoji { min-width: 100px; font-size: 4rem; }
-  .calendar-grid { font-size: 0.75rem; }
-  .cal-day { min-height: 45px; }
-  .info-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-  .plant-grid { grid-template-columns: 1fr; }
-  .info-grid { grid-template-columns: 1fr; }
-}
+  --bg:#0f1a0f;--bg2:#162016;--bg3:#1e2e1e;
+  --surface:#1a2b1a;--surface2:#223322;
+  --primary:#4caf50;--primary-dark:#388e3c;--primary-light:#81c784;--accent:#8bc34a;
+  --text:#e8f5e9;--text-dim:#a5d6a7;--text-muted:#66bb6a;
+  --danger:#ef5350;--warning:#ffb74d;
+  --border:#2e4a2e;--shadow:rgba(0,0,0,.3);
+  --radius:12px;--radius-sm:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:.8rem 2rem;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.nav-brand{font-size:1.5rem;font-weight:700;color:var(--primary-light);cursor:pointer;display:flex;align-items:center;gap:.5rem}
+.logo{font-size:1.8rem}
+.nav-links{display:flex;gap:.5rem}
+.nav-link{padding:.5rem 1rem;color:var(--text-dim);text-decoration:none;border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-size:.9rem}
+.nav-link:hover{background:var(--surface);color:var(--text)}
+.nav-link.active{background:var(--primary-dark);color:white}
+.nav-user{display:flex;align-items:center;gap:1rem}
+.btn-auth{padding:.4rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius-sm);cursor:pointer;font-size:.85rem;transition:background .2s}
+.btn-auth:hover{background:var(--primary-dark)}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer}
+.container{max-width:1400px;margin:0 auto;padding:1rem 2rem 4rem}
+.section{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+.hero{text-align:center;padding:3rem 1rem 2rem}
+.hero h1{font-size:2.5rem;background:linear-gradient(135deg,var(--primary-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.hero p{color:var(--text-dim);font-size:1.1rem}
+.section-desc{color:var(--text-dim);margin-bottom:1.5rem}
+.filters{margin-bottom:2rem}
+.search-field{width:100%;max-width:500px;margin:0 auto 1rem;display:block}
+.filter-tags{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.filter-tag{padding:.4rem 1rem;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);border-radius:20px;cursor:pointer;transition:all .2s;font-size:.85rem}
+.filter-tag:hover{border-color:var(--primary);color:var(--text)}
+.filter-tag.active{background:var(--primary-dark);color:white;border-color:var(--primary-dark)}
+.input-field{width:100%;padding:.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.95rem;margin-bottom:.8rem;transition:border-color .2s}
+.input-field:focus{outline:none;border-color:var(--primary)}
+textarea.input-field{resize:vertical;font-family:inherit}
+select.input-field{cursor:pointer}
+select.input-field option{background:var(--bg2);color:var(--text)}
+.btn{padding:.6rem 1.5rem;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:var(--radius-sm);cursor:pointer;font-size:.9rem;transition:all .2s}
+.btn:hover{background:var(--surface2)}
+.btn-primary{background:var(--primary);color:white;border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-danger{background:var(--danger);color:white;border-color:var(--danger)}
+.btn-sm{padding:.3rem .8rem;font-size:.8rem}
+.plant-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.plant-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.plant-card:hover{transform:translateY(-5px);border-color:var(--primary);box-shadow:0 8px 30px var(--shadow)}
+.plant-card-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:var(--bg3);position:relative}
+.plant-card-category{position:absolute;top:.5rem;right:.5rem;padding:.2rem .6rem;background:var(--primary-dark);color:white;border-radius:12px;font-size:.7rem;text-transform:uppercase}
+.plant-card-body{padding:1rem}
+.plant-card-body h3{margin-bottom:.3rem;color:var(--primary-light)}
+.plant-card-body p{font-size:.85rem;color:var(--text-dim);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.plant-card-meta{display:flex;gap:.8rem;margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--border)}
+.plant-meta-item{font-size:.75rem;color:var(--text-muted)}
+.plant-difficulty{display:flex;gap:2px;margin-top:.3rem}
+.diff-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.diff-dot.filled{background:var(--primary)}
+.plant-detail{padding:.5rem}
+.plant-detail-header{display:flex;gap:2rem;margin-bottom:2rem;align-items:flex-start}
+.plant-detail-emoji{font-size:6rem;min-width:150px;height:150px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border-radius:var(--radius)}
+.plant-detail-info h1{font-size:2rem;color:var(--primary-light);margin-bottom:.3rem}
+.plant-detail-info .latin{color:var(--text-muted);font-style:italic;margin-bottom:1rem}
+.plant-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.plant-tag{padding:.2rem .6rem;background:var(--bg3);border-radius:12px;font-size:.75rem;color:var(--text-dim)}
+.detail-content{line-height:1.8}
+.detail-content h3{color:var(--primary-light);margin:1rem 0 .5rem}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
+.info-card{background:var(--bg3);padding:1rem;border-radius:var(--radius-sm);text-align:center}
+.info-card .icon{font-size:1.5rem;margin-bottom:.3rem}
+.info-card .label{font-size:.75rem;color:var(--text-muted)}
+.info-card .value{font-size:.95rem;color:var(--text);font-weight:600}
+.tip-box{background:var(--bg3);border-left:3px solid var(--accent);padding:1rem;margin:1rem 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.tip-box.warning{border-left-color:var(--warning)}
+.tip-box.danger{border-left-color:var(--danger)}
+.journal-form{max-width:700px;margin-bottom:2rem}
+.journal-photos{margin-bottom:.8rem}
+.photo-upload{padding:.5rem 1rem;background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius-sm);cursor:pointer;color:var(--text-dim);display:inline-block;transition:border-color .2s}
+.photo-upload:hover{border-color:var(--primary)}
+.photo-preview{max-width:200px;max-height:150px;border-radius:var(--radius-sm);margin-top:.5rem;object-fit:cover}
+.journal-mood{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+.mood-btn{width:40px;height:40px;font-size:1.3rem;background:var(--surface);border:2px solid var(--border);border-radius:50%;cursor:pointer;transition:all .2s}
+.mood-btn:hover,.mood-btn.active{border-color:var(--primary);transform:scale(1.1)}
+.journal-entries{display:flex;flex-direction:column;gap:1rem}
+.journal-entry{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+.journal-entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.journal-entry-date{font-size:.85rem;color:var(--text-muted)}
+.journal-entry-plant{font-weight:600;color:var(--primary-light)}
+.journal-entry-mood{font-size:1.2rem}
+.journal-entry-text{color:var(--text-dim);font-size:.9rem}
+.journal-entry-photo{max-width:100%;max-height:300px;border-radius:var(--radius-sm);margin-top:.5rem}
+.journal-entry-actions{margin-top:.5rem;display:flex;gap:.5rem}
+.notes-form{max-width:700px;margin-bottom:2rem}
+.notes-list{display:flex;flex-direction:column;gap:1rem}
+.note-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+.note-card h3{color:var(--accent);margin-bottom:.3rem}
+.note-card p{color:var(--text-dim);font-size:.9rem;white-space:pre-wrap}
+.note-card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem}
+.note-date{font-size:.8rem;color:var(--text-muted)}
+.calendar-header{display:flex;align-items:center;justify-content:center;gap:2rem;margin-bottom:1.5rem}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;margin-bottom:2rem}
+.cal-header{text-align:center;padding:.5rem;font-weight:600;color:var(--text-muted);font-size:.85rem}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-size:.9rem;gap:2px;min-height:60px}
+.cal-day:hover{border-color:var(--primary)}
+.cal-day.today{border-color:var(--accent);background:var(--bg3)}
+.cal-day.empty{opacity:.3;cursor:default}
+.cal-day.selected{background:var(--primary-dark)}
+.cal-day-events{display:flex;gap:2px}
+.cal-day-event{width:6px;height:6px;border-radius:50%}
+.calendar-event-form{max-width:500px;background:var(--surface);padding:1.5rem;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:2rem}
+.calendar-events h3{color:var(--primary-light);margin-bottom:1rem}
+.cal-event{display:flex;align-items:center;gap:1rem;padding:.8rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:.5rem}
+.cal-event-icon{font-size:1.3rem}
+.cal-event-info{flex:1}
+.cal-event-plant{font-weight:600;color:var(--primary-light)}
+.cal-event-note{font-size:.85rem;color:var(--text-dim)}
+.community-form{max-width:700px;margin-bottom:2rem}
+.community-filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
+.community-feed{display:flex;flex-direction:column;gap:1rem}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+.post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+.post-author{font-weight:600;color:var(--primary-light)}
+.post-category-badge{padding:.15rem .6rem;border-radius:12px;font-size:.75rem}
+.post-text{color:var(--text-dim);font-size:.95rem;margin-bottom:.8rem;white-space:pre-wrap}
+.post-footer{display:flex;justify-content:space-between;align-items:center}
+.post-date{font-size:.8rem;color:var(--text-muted)}
+.post-actions{display:flex;gap:.8rem}
+.post-action{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+.post-action:hover{color:var(--primary)}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:200;padding:2rem}
+.modal-content{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.modal-large{max-width:800px}
+.close{position:absolute;top:1rem;right:1rem;font-size:1.5rem;color:var(--text-dim);cursor:pointer;z-index:10;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s}
+.close:hover{background:var(--surface)}
+.auth-switch{text-align:center;margin-top:1rem;color:var(--text-dim)}
+.auth-switch a{color:var(--primary);cursor:pointer}
+.footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.85rem}
+@media(max-width:768px){
+  .navbar{padding:.8rem 1rem;flex-wrap:wrap}
+  .nav-links{display:none;flex-direction:column;width:100%;padding-top:.5rem}
+  .nav-links.show{display:flex}
+  .nav-user{display:none}
+  .hamburger{display:block}
+  .container{padding:1rem}
+  .hero h1{font-size:1.8rem}
+  .plant-detail-header{flex-direction:column;align-items:center;text-align:center}
+  .plant-detail-emoji{min-width:100px;font-size:4rem}
+  .calendar-grid{font-size:.75rem}
+  .cal-day{min-height:45px}
+  .info-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){.plant-grid{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}}
 </style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 </head>
@@ -880,7 +170,6 @@ select.input-field option { background: var(--bg2); color: var(--text); }
       <a onclick="showSection('catalog')" class="nav-link active" data-section="catalog">Каталог</a>
       <a onclick="showSection('journal')" class="nav-link" data-section="journal">Журнал наблюдений</a>
       <a onclick="showSection('notes')" class="nav-link" data-section="notes">Мои заметки</a>
-      <a onclick="showSection('proposals')" class="nav-link" data-section="proposals">Предложения</a>
       <a onclick="showSection('calendar')" class="nav-link" data-section="calendar">Календарь ухода</a>
       <a onclick="showSection('community')" class="nav-link" data-section="community">Сообщество</a>
     </div>
@@ -891,7 +180,6 @@ select.input-field option { background: var(--bg2); color: var(--text); }
     <button class="hamburger" onclick="toggleMenu()">☰</button>
   </nav>
 
-  <!-- AUTH MODAL -->
   <div id="authModal" class="modal hidden">
     <div class="modal-content">
       <span class="close" onclick="closeModal('authModal')">&times;</span>
@@ -912,7 +200,6 @@ select.input-field option { background: var(--bg2); color: var(--text); }
     </div>
   </div>
 
-  <!-- PLANT DETAIL MODAL -->
   <div id="plantModal" class="modal hidden">
     <div class="modal-content modal-large">
       <span class="close" onclick="closeModal('plantModal')">&times;</span>
@@ -920,39 +207,12 @@ select.input-field option { background: var(--bg2); color: var(--text); }
     </div>
   </div>
 
-  <!-- PROPOSE EDIT MODAL -->
-  <div id="proposeModal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('proposeModal')">&times;</span>
-      <h2>Предложить изменение</h2>
-      <div id="proposeForm">
-        <label>Что изменить:</label>
-        <select id="proposeField" class="input-field">
-          <option value="description">Описание</option>
-          <option value="watering">Полив</option>
-          <option value="light">Освещение</option>
-          <option value="soil">Грунт</option>
-          <option value="temperature">Температура</option>
-          <option value="fertilizer">Удобрения</option>
-          <option value="diseases">Болезни и вредители</option>
-          <option value="tips">Советы</option>
-        </select>
-        <textarea id="proposeText" class="input-field" rows="5" placeholder="Ваш вариант..."></textarea>
-        <input type="hidden" id="proposePlantId">
-        <button onclick="submitProposal()" class="btn btn-primary">Отправить на рассмотрение</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTIONS -->
   <main class="container">
-    <!-- CATALOG -->
     <section id="catalogSection" class="section">
       <div class="hero">
         <h1>Добро пожаловать в PlantiFi</h1>
         <p>Ваш путеводитель по миру растений. Узнавайте, выращивайте, наблюдайте.</p>
       </div>
-
       <div class="filters">
         <input type="text" id="searchInput" placeholder="Поиск растений..." class="input-field search-field" oninput="filterPlants()">
         <div class="filter-tags">
@@ -966,94 +226,57 @@ select.input-field option { background: var(--bg2); color: var(--text); }
           <button class="filter-tag" onclick="filterByCategory('цветы', this)">Цветы</button>
         </div>
       </div>
-
       <div id="plantGrid" class="plant-grid"></div>
     </section>
 
-    <!-- JOURNAL -->
     <section id="journalSection" class="section hidden">
       <h2>Журнал наблюдений</h2>
-      <p class="section-desc">Записывайте свои наблюдения за растениями: как растут, что заметили, когда поливали.</p>
-
+      <p class="section-desc">Записывайте свои наблюдения за растениями.</p>
       <div class="journal-form">
-        <select id="journalPlant" class="input-field">
-          <option value="">Выберите растение...</option>
-        </select>
+        <select id="journalPlant" class="input-field"><option value="">Выберите растение...</option></select>
         <input type="date" id="journalDate" class="input-field">
         <textarea id="journalText" class="input-field" rows="3" placeholder="Ваши наблюдения..."></textarea>
         <div class="journal-photos">
-          <label class="photo-upload">
-            📷 Фото (опционально)
+          <label class="photo-upload">📷 Фото (опционально)
             <input type="file" id="journalPhoto" accept="image/*" onchange="previewPhoto(event)" hidden>
           </label>
           <img id="photoPreview" class="photo-preview hidden">
         </div>
         <div class="journal-mood">
           <span>Настроение растения:</span>
-          <button class="mood-btn" onclick="setMood('😊', this)" data-mood="😊">😊</button>
-          <button class="mood-btn" onclick="setMood('😐', this)" data-mood="😐">😐</button>
-          <button class="mood-btn" onclick="setMood('😟', this)" data-mood="😟">😟</button>
-          <button class="mood-btn" onclick="setMood('💀', this)" data-mood="💀">💀</button>
+          <button class="mood-btn active" onclick="setMood('😊', this)">😊</button>
+          <button class="mood-btn" onclick="setMood('😐', this)">😐</button>
+          <button class="mood-btn" onclick="setMood('😟', this)">😟</button>
+          <button class="mood-btn" onclick="setMood('💀', this)">💀</button>
         </div>
         <button onclick="addJournalEntry()" class="btn btn-primary">Добавить запись</button>
       </div>
-
       <div id="journalEntries" class="journal-entries"></div>
     </section>
 
-    <!-- NOTES -->
     <section id="notesSection" class="section hidden">
       <h2>Мои заметки</h2>
-      <p class="section-desc">Личные заметки и корректировки. Видны только вам. Если владелец одобрит — они станут частью сайта.</p>
-
+      <p class="section-desc">Личные заметки и корректировки. Видны только вам.</p>
       <div class="notes-form">
         <input type="text" id="noteTitle" class="input-field" placeholder="Заголовок заметки">
         <textarea id="noteText" class="input-field" rows="5" placeholder="Ваша заметка..."></textarea>
-        <div class="note-actions">
-          <button onclick="addNote()" class="btn btn-primary">Сохранить</button>
-          <label class="checkbox-label">
-            <input type="checkbox" id="notePublic"> Предложить как публичную правку
-          </label>
-        </div>
+        <button onclick="addNote()" class="btn btn-primary">Сохранить</button>
       </div>
-
       <div id="notesList" class="notes-list"></div>
     </section>
 
-    <!-- PROPOSALS -->
-    <section id="proposalsSection" class="section hidden">
-      <h2>Предложенные правки</h2>
-      <p class="section-desc">Здесь собраны все предложения по улучшению контента. Владелец сайта одобряет или отклоняет.</p>
-
-      <div class="admin-toggle">
-        <label class="checkbox-label">
-          <input type="checkbox" id="adminMode" onchange="toggleAdmin()"> Режим владельца
-        </label>
-        <input type="password" id="adminPassword" class="input-field hidden" placeholder="Пароль владельца" style="max-width:250px">
-        <button id="adminUnlock" class="btn hidden" onclick="unlockAdmin()">Ввести</button>
-      </div>
-
-      <div id="proposalsList" class="proposals-list"></div>
-    </section>
-
-    <!-- CALENDAR -->
     <section id="calendarSection" class="section hidden">
       <h2>Календарь ухода</h2>
-      <p class="section-desc">Планируйте уход за растениями: полив, подкормку, пересадку.</p>
-
+      <p class="section-desc">Планируйте полив, подкормку, пересадку.</p>
       <div class="calendar-header">
         <button onclick="changeMonth(-1)" class="btn">&lt;</button>
         <h3 id="calendarMonth"></h3>
         <button onclick="changeMonth(1)" class="btn">&gt;</button>
       </div>
-
       <div id="calendarGrid" class="calendar-grid"></div>
-
       <div class="calendar-event-form" id="calendarEventForm" style="display:none">
         <h4>Добавить событие на <span id="eventDate"></span></h4>
-        <select id="eventPlant" class="input-field">
-          <option value="">Растение...</option>
-        </select>
+        <select id="eventPlant" class="input-field"><option value="">Растение...</option></select>
         <select id="eventType" class="input-field">
           <option value="water">💧 Полив</option>
           <option value="fertilize">🧪 Подкормка</option>
@@ -1064,36 +287,29 @@ select.input-field option { background: var(--bg2); color: var(--text); }
         <textarea id="eventNote" class="input-field" rows="2" placeholder="Заметка..."></textarea>
         <button onclick="addCalendarEvent()" class="btn btn-primary">Добавить</button>
       </div>
-
       <div id="calendarEvents" class="calendar-events"></div>
     </section>
 
-    <!-- COMMUNITY -->
     <section id="communitySection" class="section hidden">
       <h2>Сообщество PlantiFi</h2>
       <p class="section-desc">Делитесь опытом, задавайте вопросы, помогайте друг другу.</p>
-
       <div class="community-form">
-        <textarea id="communityPost" class="input-field" rows="3" placeholder="Поделитесь своим опытом или задайте вопрос..."></textarea>
+        <textarea id="communityPost" class="input-field" rows="3" placeholder="Поделитесь опытом или задайте вопрос..."></textarea>
         <select id="postCategory" class="input-field" style="max-width:250px">
           <option value="tip">💡 Совет</option>
           <option value="question">❓ Вопрос</option>
-          <option value="photo">📸 Фото</option>
           <option value="success">🎉 Успех</option>
           <option value="problem">⚠️ Проблема</option>
         </select>
         <button onclick="addCommunityPost()" class="btn btn-primary">Опубликовать</button>
       </div>
-
       <div class="community-filters">
         <button class="filter-tag active" onclick="filterPosts('all', this)">Все</button>
         <button class="filter-tag" onclick="filterPosts('tip', this)">💡 Советы</button>
         <button class="filter-tag" onclick="filterPosts('question', this)">❓ Вопросы</button>
-        <button class="filter-tag" onclick="filterPosts('photo', this)">📸 Фото</button>
         <button class="filter-tag" onclick="filterPosts('success', this)">🎉 Успехи</button>
         <button class="filter-tag" onclick="filterPosts('problem', this)">⚠️ Проблемы</button>
       </div>
-
       <div id="communityFeed" class="community-feed"></div>
     </section>
   </main>
@@ -1104,962 +320,575 @@ select.input-field option { background: var(--bg2); color: var(--text); }
 
   <script>const PLANTS = [
   {
-    id: 1, name: "Томат", latin: "Solanum lycopersicum", emoji: "🍅",
-    category: "овощи", difficulty: 2,
-    description: "Одно из самых популярных овощных растений в мире. Томаты бывают разных форм, размеров и цветов — от крошечных черри до гигантских бифштексов.",
-    care: {
-      watering: "Регулярный полив 2-3 раза в неделю. Избегайте попадания воды на листья. Лучше поливать утром или вечером.",
-      light: "Полное солнце — минимум 6-8 часов прямого солнечного света в день.",
-      soil: "Плодородная, хорошо дренированная почва с pH 6.0-6.8. Смесь садовой земли с компостом.",
-      temperature: "Оптимально 20-25°C. Пониже 15°C и выше 35°C замедляют рост.",
-      fertilizer: "Подкормка каждые 2 недели комплексным удобрением. В период плодоношения — больше калия.",
-      diseases: "Фитофтороз, мучнистая роса, вершинная гниль. Профилактика: проветривание, правильный полив.",
-      tips: "Пасынкование повышает урожай. Мульчирование сохраняет влагу. Совместимость с базиликом."
-    },
-    planting: "Конец февраля — начало марта (рассада). Высадка в грунт через 50-70 дней после всходов.",
-    harvest: "Сбор урожая через 60-100 дней после высадки рассады. Снимайте при полной спелости или бурой.",
-    season: "Весна-Лето"
+    id:1, name:"Томат", latin:"Solanum lycopersicum", emoji:"🍅", category:"овощи", difficulty:2,
+    description:"Одно из самых популярных овощных растений в мире. Томаты бывают разных форм, размеров и цветов — от крошечных черри до гигантских бифштексов.",
+    care:{ watering:"Регулярный полив 2-3 раза в неделю. Избегайте попадания воды на листья.", light:"Полное солнце — минимум 6-8 часов.", soil:"Плодородная, хорошо дренированная почва pH 6.0-6.8.", temperature:"Оптимально 20-25°C.", fertilizer:"Каждые 2 недели комплексным удобрением.", diseases:"Фитофтороз, мучнистая роса, вершинная гниль.", tips:"Пасынкование повышает урожай. Мульчирование сохраняет влагу." },
+    planting:"Конец февраля — начало марта (рассада).", harvest:"Через 60-100 дней после высадки.", season:"Весна-Лето"
   },
   {
-    id: 2, name: "Огурец", latin: "Cucumis sativus", emoji: "🥒",
-    category: "овощи", difficulty: 2,
-    description: "Быстрорастущее однолетнее растение с плодами, на 95% состоящими из воды. Идеален для летнего выращивания.",
-    care: {
-      watering: "Обильный и частый полив — ежедневно в жару. Огурцы очень требовательны к влаге.",
-      light: "Солнечное место, но допускается лёгкая полутень в обеденные часы.",
-      soil: "Рыхлая, питательная, хорошо удерживающая влагу. pH 6.0-7.0.",
-      temperature: "Теплолюбивое. Оптимально 22-28°C. Не переносит заморозков.",
-      fertilizer: "Подкормка каждые 10-14 дней. Чередуйте минеральные и органические удобрения.",
-      diseases: "Мучнистая роса, пероноспороз, корневая гниль. Важно чередовать культуры.",
-      tips: "Формирование в 1-2 стебля повышает урожай. Регулярный сбор стимулирует образование новых плодов."
-    },
-    planting: "Посев семян в грунт в мае-июне. Рассада: конец апреля.",
-    harvest: "Сбор каждые 2-3 дня. Плоды набирают полный вкус при длине 15-25 см.",
-    season: "Лето"
+    id:2, name:"Огурец", latin:"Cucumis sativus", emoji:"🥒", category:"овощи", difficulty:2,
+    description:"Быстрорастущее однолетнее растение с плодами, на 95% состоящими из воды.",
+    care:{ watering:"Обильный полив — ежедневно в жару.", light:"Солнечное место, допускается лёгкая полутень.", soil:"Рыхлая, питательная, pH 6.0-7.0.", temperature:"Оптимально 22-28°C. Не переносит заморозков.", fertilizer:"Каждые 10-14 дней чередуйте минеральные и органические.", diseases:"Мучнистая роса, пероноспороз, корневая гниль.", tips:"Формирование в 1-2 стебля повышает урожай." },
+    planting:"Посев семян в грунт в мае-июне.", harvest:"Сбор каждые 2-3 дня.", season:"Лето"
   },
   {
-    id: 3, name: "Фикус Бенджамина", latin: "Ficus benjamina", emoji: "🌳",
-    category: "комнатные", difficulty: 2,
-    description: "Одно из самых популярных комнатных растений с глянцевыми зелёными листьями. Неприхотлив и идеален для дома и офиса.",
-    care: {
-      watering: "Умеренный полив 1-2 раза в неделю. Дайте верхнему слою почвы подсохнуть. Не переливайте!",
-      light: "Яркий рассеянный свет. Может адаптироваться к полутени, но теряет листья в темноте.",
-      soil: "Рыхлый субстрат для фикусов или универсальный грунт с добавкой перлита.",
-      temperature: "18-24°C. Не ставьте рядом с батареями и кондиционерами. Боится сквозняков.",
-      fertilizer: "Весной и летом каждые 2 недели удобрением для декоративно-лиственных растений.",
-      diseases: "Паутинный клещ, щитовка. Листья желтеют от перелива или сквозняков.",
-      tips: "Протирайте листья влажной тряпкой каждые 2 недели. Не меняйте часто место. Приспосабливается к новым условиям за 2-3 недели."
-    },
-    planting: "Покупка в цветочном магазине. Размножение черенками весной.",
-    harvest: "Декоративное растение — без урожая.",
-    season: "Круглый год"
+    id:3, name:"Морковь", latin:"Daucus carota", emoji:"🥕", category:"овощи", difficulty:2,
+    description:"Двулетнее корнеплодное растение. Богата каротином (витамин А).",
+    care:{ watering:"Регулярный полив 2-3 раза в неделю.", light:"Полное солнце или лёгкая полутень.", soil:"Рыхлая, песчаная, глубокая. Без камней.", temperature:"Холодостойка. Оптимально 16-20°C.", fertilizer:"Калийные удобрения. Азот вызывает рост ботвы.", diseases:"Морковная муха, фомоз.", tips:"Прореживание через 3 недели после всходов." },
+    planting:"Посев семян в апреле-мае прямо в грунт.", harvest:"Через 70-100 дней после посева.", season:"Весна-Лето"
   },
   {
-    id: 4, name: "Сансевиерия", latin: "Sansevieria trifasciata", emoji: "🌿",
-    category: "комнатные", difficulty: 1,
-    description: "Неприхотливое суккулентное растение, также известное как 'тещин язык'. Очищает воздух и не требует частого полива.",
-    care: {
-      watering: "Редкий полив — раз в 2-3 недели. Зимой раз в месяц. Лучше недолить, чем перелить.",
-      light: "Теневынослива, но лучше себя чувствует при ярком рассеянном свете.",
-      soil: "Супесчаный или кактусовый грунт. Обязательно с дренажом.",
-      temperature: "16-25°C. Переносит понижение до 10°C. Не переносит морозов.",
-      fertilizer: "Подкормка раз в месяц весной-летом. Зимой не удобряйте.",
-      diseases: "Корневая гниль от перелива. Крайне устойчива к вредителям.",
-      tips: "Отлично подходит для спальни — выделяет кислород ночью. Размножается делением листа."
-    },
-    planting: "Покупка или размножение листом/делением куста в любое время.",
-    harvest: "Декоративное растение — без урожая.",
-    season: "Круглый год"
+    id:4, name:"Картофель", latin:"Solanum tuberosum", emoji:"🥔", category:"овощи", difficulty:2,
+    description:"Одно из главных пищевых растений мира. Клубни богаты крахмалом и витамином C.",
+    care:{ watering:"Обильный полив в период цветения. 1-2 раза в неделю.", light:"Полное солнце.", soil:"Рыхлая, кислая или слабокислая, влажная.", temperature:"Оптимально 18-22°C. Не переносит заморозков.", fertilizer:"Три подкормки за сезон: азот до цветения, калий после.", diseases:"Фитофтороз, колорадский жук, парша.", tips:"Окучивание повышает урожай. Севооборот обязателен." },
+    planting:"Клубни в мае при прогреве почвы до 8-10°C.", harvest:"Через 70-120 дней в зависимости от сорта.", season:"Весна-Лето"
   },
   {
-    id: 5, name: "Ромашка", latin: "Matricaria chamomilla", emoji: "🌼",
-    category: "травы", difficulty: 1,
-    description: "Душистое лекарственное растение с белыми лепестками и жёлтой серединкой. Используется в медицине и кулинарии.",
-    care: {
-      watering: "Умеренный полив. Засухоустойчива, но лучше при регулярной увлажнённости.",
-      light: "Полное солнце или лёгкая полутень.",
-      soil: "Любая рыхлая садовая почва. Неприхотлива.",
-      temperature: "Холодостойка. Оптимально 15-22°C. Зимует под снегом.",
-      fertilizer: "Подкормка не обязательна. Можно комплексным удобрением раз за сезон.",
-      diseases: "Практически не поражается. Мучнистая роса в сырую погоду.",
-      tips: "Сбор соцветий — когда они раскрыты, утром после высыхания росы. Сушите в тени."
-    },
-    planting: "Посев семян весной или осенью. Самосев при правильном уходе.",
-    harvest: "Сбор цветков с июня по август. 3-4 урожая за сезон.",
-    season: "Весна-Лето"
+    id:5, name:"Свёкла", latin:"Beta vulgaris", emoji:"🫒", category:"овощи", difficulty:1,
+    description:"Двулетнее корнеплодное растение с характерным бордовым цветом. Богата железом и фолиевой кислотой.",
+    care:{ watering:"Регулярный полив. Неравномерный полив вызывает растрескивание.", light:"Полное солнце.", soil:"Плодородная, рыхлая, нейтральная.", temperature:"Холодостойка. Оптимально 16-22°C.", fertilizer:"Подкормка бором и марганцем. Не переборщите с азотом.", diseases:"Церкоспороз, фомоз, корневая гниль.", tips:"Не сейте после свёклы и моркови 3-4 года." },
+    planting:"Посев в мае-июне. Заглубление 2-3 см.", harvest:"Через 65-80 дней. Уборка до морозов.", season:"Весна-Лето"
   },
   {
-    id: 6, name: "Лаванда", latin: "Lavandula angustifolia", emoji: "💜",
-    category: "садовые", difficulty: 2,
-    description: "Ароматное многолетнее вечнозелёное растение с фиолетовыми соцветиями. Символ Прованса и источник покоя.",
-    care: {
-      watering: "Редкий обильный полив. Засухоустойчива. Избегайте застоя воды.",
-      light: "Максимум солнца. Не менее 6-8 часов прямого света.",
-      soil: "Рыхлая, щелочная, песчаная. Дренаж обязателен!",
-      temperature: "Морозостойка до -25°C. Боится сильной влажности.",
-      fertilizer: "Минимальная подкормка. Азотные удобрения вызывают потерю запаха.",
-      diseases: "Корневая гниль при застое воды. Серая гниль в сырую погоду.",
-      tips: "Обрезка после цветения на 1/3 стимулирует кустистость. Сушка связанных пучков в тени."
-    },
-    planting: "Рассада или черенки в мае. Семена стратифицировать.",
-    harvest: "Сбор цветков в начале цветения. Сушка в связанных пучках в тени.",
-    season: "Лето"
+    id:6, name:"Лук репчатый", latin:"Allium cepa", emoji:"🧅", category:"овощи", difficulty:1,
+    description:"Двулетнее растение с луковицей. Основа многих блюд. Богат витамином C и фитонцидами.",
+    care:{ watering:"Умеренный полив. В период формирования луковицы — обильнее.", light:"Полное солнце.", soil:"Рыхлая, плодородная, нейтральная.", temperature:"Холодостойка. Оптимально 15-25°C.", fertilizer:"Подкормка каждые 2 недели. В начале — азот, затем калий.", diseases:"Луковая муха, пероноспороз, шейковая гниль.", tips:"Севооборот обязателен. Высадка после бобовых." },
+    planting:"Севок в апреле-мае или семена в марте на рассаду.", harvest:"Через 80-120 дней. Сигнал — полегание ботвы.", season:"Весна-Лето"
   },
   {
-    id: 7, name: "Суккулент Эхеверия", latin: "Echeveria elegans", emoji: "🪴",
-    category: "суккуленты", difficulty: 1,
-    description: "Красивый суккулент в форме розетки с голубовато-зелёными листьями. Идеален для начинающих цветоводов.",
-    care: {
-      watering: "Редкий полив — каждые 2-3 недели. Полностью просушивайте грунт между поливами.",
-      light: "Яркое прямое солнце минимум 4-6 часов. Идеально — подоконник южного окна.",
-      soil: "Грунт для кактусов/суккулентов с добавкой песка. Обязательно с дренажом.",
-      temperature: "15-25°C. Зимой можно держать при 10-12°C. Не ниже 5°C.",
-      fertilizer: "Раз в месяц удобрением для суккулентов в половинной дозе. Зимой не удобряйте.",
-      diseases: "Паутинный клещ, тля. Основная проблема — корневая гниль от перелива.",
-      tips: "Листья легко укореняются — размножение листом. Не опрыскивайте розетку."
-    },
-    planting: "Покупка или размножение листом/детками в любое время.",
-    harvest: "Декоративное растение — без урожая.",
-    season: "Круглый год"
+    id:7, name:"Фикус Бенджамина", latin:"Ficus benjamina", emoji:"🌳", category:"комнатные", difficulty:2,
+    description:"Одно из самых популярных комнатных растений с глянцевыми зелёными листьями.",
+    care:{ watering:"Умеренный полив 1-2 раза в неделю.", light:"Яркий рассеянный свет.", soil:"Рыхлый субстрат с перлитом.", temperature:"18-24°C. Боится сквозняков.", fertilizer:"Весной и летом каждые 2 недели.", diseases:"Паутинный клещ, щитовка.", tips:"Протирайте листья каждые 2 недели. Не меняйте часто место." },
+    planting:"Размножение черенками весной.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 8, name: "Мята", latin: "Mentha", emoji: "🍃",
-    category: "травы", difficulty: 1,
-    description: "Ароматное многолетнее травянистое растение. Незаменима в кулинарии, чае и медицине. Разрастается быстро!",
-    care: {
-      watering: "Регулярный полив. Любит влажность. В жару — ежедневно.",
-      light: "Полутень или солнце. В теневых участках аромат менее насыщенный.",
-      soil: "Плодородная, влажная, рыхлая. Любит нейтральную или слабокислую почву.",
-      temperature: "Морозостойка до -30°C. Оптимально 18-22°C.",
-      fertilizer: "Подкормка компостом весной. Можно 2 раза за сезон комплексным удобрением.",
-      diseases: "Ржавчина, мучнистая роса. Вредители: тля, паутинный клещ.",
-      tips: "Выращивайте в контейнере — разрастается агрессивно! Регулярная обрезка стимулирует кустистость."
-    },
-    planting: "Корневищами или черенками весной. Можно из семян.",
-    harvest: "Сбор листьев перед цветением — максимальная ароматичность. Срезайте по мере роста.",
-    season: "Весна-Лето"
+    id:8, name:"Сансевиерия", latin:"Sansevieria trifasciata", emoji:"🌿", category:"комнатные", difficulty:1,
+    description:"Неприхотливое суккулентное растение. Очищает воздух и не требует частого полива.",
+    care:{ watering:"Редкий полив — раз в 2-3 недели.", light:"Теневынослива, но лучше при ярком рассеянном свете.", soil:"Супесчаный или кактусовый грунт с дренажом.", temperature:"16-25°C. Не переносит морозов.", fertilizer:"Раз в месяц весной-летом.", diseases:"Корневая гниль от перелива.", tips:"Отлично для спальни — выделяет кислород ночью." },
+    planting:"Размножение листом/делением куста.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 9, name: "Роза", latin: "Rosa", emoji: "🌹",
-    category: "цветы", difficulty: 3,
-    description: "Королева цветов. Символ любви и красоты. Существует более 30 000 сортов разных форм и окрасок.",
-    care: {
-      watering: "Обильный полив 2-3 раза в неделю. Лучше под корень, чем по листьям.",
-      light: "Полное солнце — минимум 6 часов. Чем больше света, тем обильнее цветение.",
-      soil: "Плодородная, нейтральная, хорошо дренированная. pH 6.0-6.5.",
-      temperature: "Морозостойка (после прививки). Оптимально 18-25°C. Укрывайте на зиму.",
-      fertilizer: "Подкормка каждые 2 недели в период роста. Чередуйте азот, фосфор, калий.",
-      diseases: "Мучнистая роса, чёрная пятнистость, ржавчина. Профилактика: обработка фунгицидами.",
-      tips: "Обрезка весной — формирующая и санитарная. Совместимость с лавандой (отпугивает вредителей)."
-    },
-    planting: "Саженцы осенью (сентябрь-ноябрь) или весной (апрель).",
-    harvest: "Срезка цветков для букетов в утренние или вечерние часы.",
-    season: "Весна-Лето"
+    id:9, name:"Орхидея Фаленопсис", latin:"Phalaenopsis", emoji:"🌸", category:"комнатные", difficulty:2,
+    description:"Самый популярный вид орхидей для дома. Долго цветёт красивыми бабочками.",
+    care:{ watering:"1 раз в 5-7 дней методом погружения на 15-20 мин.", light:"Яркий рассеянный свет. Восточный подоконник.", soil:"Кора, мох, керамзит.", temperature:"18-25°C. Перепад day/night стимулирует цветение.", fertilizer:"Раз в 2 недели для орхидей в 1/4 дозы.", diseases:"Корневая гниль. Не заливайте!", tips:"Прозрачный горшок обязателен. Пересадка каждые 2-3 года." },
+    planting:"Размножение дочерними розетками.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 10, name: "Семена льна", latin: "Linum usitatissimum", emoji: "🌾",
-    category: "овощи", difficulty: 1,
-    description: "Древнее культурное растение. Семена богаты Омега-3 жирными кислотами и клетчаткой. Используется в кулинарии и медицине.",
-    care: {
-      watering: "Умеренный полив. Засухоустойчив после укоренения.",
-      light: "Полное солнце.",
-      soil: "Любая рыхлая почва. Неприхотлив.",
-      temperature: "Холодостойкий. Оптимально 15-25°C.",
-      fertilizer: "Минимальная подкормка. Компост при посадке.",
-      diseases: "Фузариоз, фомопсис. Профилактика: севооборот.",
-      tips: "Зрелые коробочки легко рассыпаются — собирайте при побурении верхних."
-    },
-    planting: "Посев ранней весной прямо в грунт. Заглубление на 2-3 см.",
-    harvest: "Сбор семян через 3-4 месяца после посева.",
-    season: "Весна-Лето"
+    id:10, name:"Алоэ Вера", latin:"Aloe vera", emoji:"🌱", category:"комнатные", difficulty:1,
+    description:"Суккулент с толстыми мясистыми листьями. Используется в медицине и косметологии.",
+    care:{ watering:"Редкий полив — каждые 2-3 недели.", light:"Яркий рассеянный свет.", soil:"Грунт для суккулентов с дренажом.", temperature:"15-25°C. Не ниже 10°C.", fertilizer:"Раз в месяц весной-летом.", diseases:"Корневая гниль от перелива.", tips:"Сок листьев заживляет раны. Не опрыскивайте." },
+    planting:"Детками от основного растения.", harvest:"Сок листьев по мере необходимости.", season:"Круглый год"
   },
   {
-    id: 11, name: "Яблоня", latin: "Malus domestica", emoji: "🍎",
-    category: "деревья", difficulty: 3,
-    description: "Плодовое дерево, плоды которого являются одними из самых популярных фруктов в мире. Существует тысячи сортов.",
-    care: {
-      watering: "Регулярный полив молодых деревьев. Взрослые — в засуху.",
-      light: "Полное солнце — минимум 6-8 часов.",
-      soil: "Плодородная, хорошо дренированная. Не переносит засоления.",
-      temperature: "Морозостойка. Плодоношение лучше при перепаде дневных и ночных температур.",
-      fertilizer: "Подкормка весной (азот), летом (фосфор-калий), осенью (калий-фосфор).",
-      diseases: "Парша, мучнистая роса, плодовая гниль. Обработка фунгицидами 3-4 раза за сезон.",
-      tips: "Формирующая обрезка начинается с первого года. Сорта-опылители повышают урожай."
-    },
-    planting: "Саженцы осенью (сентябрь-ноябрь) или весной (апрель). Схема 4×4 м.",
-    harvest: "Плодоношение через 3-5 лет после посадки. Сбор в августе-октябре.",
-    season: "Осень"
+    id:11, name:"Герань", latin:"Pelargonium", emoji:"🌺", category:"комнатные", difficulty:1,
+    description:"Яркое цветущее растение на подоконнике. Ароматные листья отпугивают комаров.",
+    care:{ watering:"Умеренный полив. Между поливами верхний слой подсыхает.", light:"Максимум солнца. Южное окно.", soil:"Рыхлая, плодородная, с дренажом.", temperature:"18-25°C. Зимой 10-15°C для отдыха.", fertilizer:"Каждые 2 недели в период цветения.", diseases:"Корневая гниль, серая гниль.", tips:"Обрезка после цветения стимулирует повторное цветение." },
+    planting:"Черенки весной или семена.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 12, name: "Базилик", latin: "Ocimum basilicum", emoji: "🌿",
-    category: "травы", difficulty: 1,
-    description: "Ароматная однолетняя трава, незаменимая в итальянской и восточной кухне. Множество разновидностей: зелёный, фиолетовый, лимонный.",
-    care: {
-      watering: "Регулярный полив, но без застоя воды. Лучше часто и понемногу.",
-      light: "Полное солнце — 6-8 часов. В теневых местах теряет аромат.",
-      soil: "Плодородная, рыхлая, влагоёмкая. pH 6.0-7.0.",
-      temperature: "Теплолюбив. Оптимально 22-30°C. Не переносит заморозков.",
-      fertilizer: "Подкормка каждые 2 недели слабым раствором комплексного удобрения.",
-      diseases: "Чёрная ножка, фузариозное увядание. Не поливайте по листьям!",
-      tips: "Прищипывание верхушки стимулирует ветвление. Регулярный сбор листьев предотвращает цветение."
-    },
-    planting: "Посев семян в мае или рассада с марта. Температура грунта выше 15°C.",
-    harvest: "Сбор листьев через 3-4 недели после появления всходов. Срезайте верхушки.",
-    season: "Лето"
+    id:12, name:"Монстера", latin:"Monstera deliciosa", emoji:"🪴", category:"комнатные", difficulty:1,
+    description:"Эффектная тропическая лиана с дырчатыми листьями. Неприхотлива и быстро растёт.",
+    care:{ watering:"Умеренный полив 1-2 раза в неделю. Подсушивать верхний слой.", light:"Яркий рассеянный свет. Может переносить полутень.", soil:"Рыхлый субстрат с перлитом и корой.", temperature:"18-28°C. Не ниже 15°C.", fertilizer:"Каждые 2 недели весной-летом.", diseases:"Паутинный клещ, щитовка.", tips:"Опора обязательна — лиана цепляется корнями." },
+    planting:"Черенки с воздушным корнем.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 13, name: "Хоста", latin: "Hosta", emoji: "🥬",
-    category: "садовые", difficulty: 1,
-    description: "Королева тенистого сада. Декоративно-лиственное многолетнее растение с роскошными листьями разных форм и оттенков.",
-    care: {
-      watering: "Регулярный полив. Любит влажную почву, но не застой.",
-      light: "Полутень или тень. Прямое солнце выжигает листья.",
-      soil: "Плодородная, влажная, рыхлая. Мульчирование обязательно.",
-      temperature: "Морозостойка. Оптимально 15-22°C.",
-      fertilizer: "Подкормка весной компостом и комплексным удобрением.",
-      diseases: "Слизни — главный враг! Мучнистая роса. Профилактика: мульчирование.",
-      tips: "Деление куста каждые 3-4 года. Осенняя обрезка после первых заморозков."
-    },
-    planting: "Делёнки весной или осенью. Семена требуют стратификации.",
-    harvest: "Декоративное растение. Цветоносы удаляют после цветения.",
-    season: "Весна-Лето"
+    id:13, name:"Кактус Маммиллярия", latin:"Mammillaria gracilis", emoji:"🌵", category:"суккуленты", difficulty:1,
+    description:"Миниатюрный шаровидный кактус с белыми иголками. Цветёт мелкими розовыми цветками.",
+    care:{ watering:"Редкий полив — каждые 2-4 недели. Зимой 1 раз в месяц.", light:"Максимум солнца. Южное окно.", soil:"Грунт для кактусов с керамзитом.", temperature:"Летом 20-30°C, зимой 5-10°C.", fertilizer:"Раз в месяц в половинной дозе. Только весной-летом.", diseases:"Корневая гниль при переливе.", tips:"Дочерние розетки легко укореняются." },
+    planting:"Дочерними розетками весной-летом.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 14, name: "Кактус-каклюс", latin: "Mammillaria gracilis", emoji: "🌵",
-    category: "суккуленты", difficulty: 1,
-    description: "Миниатюрный шаровидный кактус с белыми иголками. Образует красивые обросшие подушки. Цветёт мелкими розовыми цветками.",
-    care: {
-      watering: "Редкий полив — каждые 2-4 недели. Зимой 1 раз в месяц или реже.",
-      light: "Максимум солнца. Южное окно — идеально.",
-      soil: "Грунт для кактусов с добавкой керамзита для дренажа.",
-      temperature: "Летом 20-30°C, зимой 5-10°C. Покой обязателен для цветения.",
-      fertilizer: "Раз в месяц в половинной дозе удобрением для кактусов. Только весной-летом.",
-      diseases: "Корневая гниль при переливе. Паутинный клещ при сухом воздухе.",
-      tips: "Дочерние розетки легко отделяются — размножение присосками. Не опрыскивайте."
-    },
-    planting: "Покупка или размножение дочерними розетками весной-летом.",
-    harvest: "Декоративное растение — без урожая.",
-    season: "Круглый год"
+    id:14, name:"Эхеверия", latin:"Echeveria elegans", emoji:"🪻", category:"суккуленты", difficulty:1,
+    description:"Красивый суккулент в форме розетки с голубовато-зелёными листьями.",
+    care:{ watering:"Редкий полив — каждые 2-3 недели.", light:"Яркое прямое солнце минимум 4-6 часов.", soil:"Грунт для кактусов с добавкой песка.", temperature:"15-25°C. Не ниже 5°C.", fertilizer:"Раз в месяц в половинной дозе.", diseases:"Паутинный клещ, корневая гниль.", tips:"Листья легко укореняются — размножение листом." },
+    planting:"Размножение листом/детками.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 15, name: "Морковь", latin: "Daucus carota", emoji: "🥕",
-    category: "овощи", difficulty: 2,
-    description: "Двулетнее корнеплодное растение. Богата каротином (витамин А). Классический овощ для грядки.",
-    care: {
-      watering: "Регулярный полив для формирования ровного корнеплода. 2-3 раза в неделю.",
-      light: "Полное солнце или лёгкая полутень.",
-      soil: "Рыхлая, песчаная, глубокая. Без камней — корнеплоды будут искривлёнными.",
-      temperature: "Холодостойка. Семена прорастают при 4-5°C. Оптимально 16-20°C.",
-      fertilizer: "Подкормка калийными удобрениями. Азот вызывает рост ботвы в ущерб корнеплоду.",
-      diseases: "Морковная муха, фомоз, альтернариоз. Профилактика: севооборот, укроп рядом.",
-      tips: "Прореживание через 3 недели после всходов. Мульчирование сохраняет влагу."
-    },
-    planting: "Посев семян в апреле-мае прямо в грунт. Семена медленно всходят!",
-    harvest: "Сбор через 70-100 дней после посева. Пучковая морковь — через 30-40 дней.",
-    season: "Весна-Лето"
+    id:15, name:"Литопс", latin:"Lithops", emoji:"🪨", category:"суккуленты", difficulty:2,
+    description:"«Живые камни» — суккуленты, сливающиеся с грунтом. Удивительная адаптация к засухе.",
+    care:{ watering:"Летом — раз в 2 недели, зимой — 1 раз в 1-2 месяца.", light:"Максимум прямого солнца.", soil:"Мелкий гравий и песок, отличный дренаж.", temperature:"15-30°C. Зимой 10-15°C.", fertilizer:"Не удобряйте.", diseases:"Корневая гниль — главный враг.", tips:"Не опрыскивайте! Линька — нормальный процесс." },
+    planting:"Семена или деление.", harvest:"Декоративное растение.", season:"Круглый год"
   },
   {
-    id: 16, name: "Орхидея Фаленопсис", latin: "Phalaenopsis", emoji: "🌸",
-    category: "комнатные", difficulty: 2,
-    description: "Самый популярный вид орхидей для дома. Долго цветёт красивыми бабочками. Современные гибриды неприхотливы.",
-    care: {
-      watering: "Когда корни станут серебристыми — 1 раз в 5-7 дней. Методом погружения на 15-20 мин.",
-      light: "Яркий рассеянный свет. Восточный или западный подоконник.",
-      soil: "Кора, мох, керамзит. Неordinaryный грунт не подходит!",
-      temperature: "18-25°C. Перепад day/night стимулирует цветение (ночью 15-18°C).",
-      fertilizer: "Раз в 2 недели удобрением для орхидей в 1/4 дозы. Зимой — реже.",
-      diseases: "Корневая гниль, бактериальное пятнистость. Не заливайте!",
-      tips: "Горшок должен быть прозрачным — корни участвуют в фотосинтезе. Пересадка каждые 2-3 года."
-    },
-    planting: "Покупка в цветочном магазине. Размножение дочерними розетками (педункулами).",
-    harvest: "Декоративное растение — без урожая.",
-    season: "Круглый год"
+    id:16, name:"Ромашка", latin:"Matricaria chamomilla", emoji:"🌼", category:"травы", difficulty:1,
+    description:"Душистое лекарственное растение с белыми лепестками и жёлтой серединкой.",
+    care:{ watering:"Умеренный полив. Засухоустойчива.", light:"Полное солнце или лёгкая полутень.", soil:"Любая рыхлая садовая почва.", temperature:"Холодостойка. Оптимально 15-22°C.", fertilizer:"Не обязательна. Можно раз за сезон.", diseases:"Практически не поражается.", tips:"Сбор утром после высыхания росы. Сушите в тени." },
+    planting:"Посев семян весной или осенью.", harvest:"Сбор цветков с июня по август.", season:"Весна-Лето"
+  },
+  {
+    id:17, name:"Мята", latin:"Mentha", emoji:"🍃", category:"травы", difficulty:1,
+    description:"Ароматное многолетнее растение. Незаменима в чае и кулинарии.",
+    care:{ watering:"Регулярный полив. Любит влажность.", light:"Полутень или солнце.", soil:"Плодородная, влажная, рыхлая.", temperature:"Морозостойка до -30°C.", fertilizer:"Подкормка компостом весной.", diseases:"Ржавчина, мучнистая роса.", tips:"Выращивайте в контейнере — разрастается агрессивно!" },
+    planting:"Корневищами или черенками весной.", harvest:"Сбор листьев перед цветением.", season:"Весна-Лето"
+  },
+  {
+    id:18, name:"Базилик", latin:"Ocimum basilicum", emoji:"🌿", category:"травы", difficulty:1,
+    description:"Ароматная трава, незаменимая в итальянской и восточной кухне.",
+    care:{ watering:"Регулярный полив без застоя воды.", light:"Полное солнце — 6-8 часов.", soil:"Плодородная, рыхлая, pH 6.0-7.0.", temperature:"Теплолюбив. 22-30°C.", fertilizer:"Каждые 2 недели слабым раствором.", diseases:"Чёрная ножка, фузариоз.", tips:"Прищипывание верхушки стимулирует ветвление." },
+    planting:"Посев семян в мае или рассада с марта.", harvest:"Через 3-4 недели после всходов.", season:"Лето"
+  },
+  {
+    id:19, name:"Укроп", latin:"Anethum graveolens", emoji:"🌱", category:"травы", difficulty:1,
+    description:"Однолетняя ароматная трава с перистыми листьями. Основа русской кухни.",
+    care:{ watering:"Умеренный полив. Засухоустойчив.", light:"Полное солнце или полутень.", soil:"Плодородная, рыхлая.", temperature:"Холодостойка. Оптимально 17-20°C.", fertilizer:"Подкормка не обязательна.", diseases:"Тля, мучнистая роса.", tips:"Посев каждые 2 недели для непрерывного урожая." },
+    planting:"Посев семян в мае прямо в грунт.", harvest:"Через 30-40 дней зелень, через 60-80 зонтики.", season:"Весна-Лето"
+  },
+  {
+    id:20, name:"Кориандр", latin:"Coriandrum sativum", emoji:"🪴", category:"травы", difficulty:1,
+    description:"Однолетнее растение. Зелень и семена (кинза) — разные вкусы!",
+    care:{ watering:"Умеренный полив.", light:"Полное солнце или полутень.", soil:"Плодородная, влажная.", temperature:"Холодостойка. 17-22°C.", fertilizer:"Не нужен.", diseases:"Мучнистая роса.", tips:"Собирайте листья до цветения — они вкуснее." },
+    planting:"Посев семян в апреле-июне.", harvest:"Зелень через 25-30 дней.", season:"Весна-Лето"
+  },
+  {
+    id:21, name:"Лаванда", latin:"Lavandula angustifolia", emoji:"💜", category:"садовые", difficulty:2,
+    description:"Ароматное многолетнее растение с фиолетовыми соцветиями. Символ Прованса.",
+    care:{ watering:"Редкий обильный полив. Засухоустойчива.", light:"Максимум солнца. 6-8 часов.", soil:"Рыхлая, щелочная, песчаная.", temperature:"Морозостойка до -25°C.", fertilizer:"Минимальная подкормка.", diseases:"Корневая гниль при застое воды.", tips:"Обрезка после цветения на 1/3." },
+    planting:"Рассада или черенки в мае.", harvest:"Сбор цветков в начале цветения.", season:"Лето"
+  },
+  {
+    id:22, name:"Хоста", latin:"Hosta", emoji:"🥬", category:"садовые", difficulty:1,
+    description:"Королева тенистого сада. Роскошные листья разных форм и оттенков.",
+    care:{ watering:"Регулярный полив. Любит влажность.", light:"Полутень или тень.", soil:"Плодородная, влажная, рыхлая.", temperature:"Морозостойка. 15-22°C.", fertilizer:"Весной компост и комплексное удобрение.", diseases:"Слизни — главный враг!", tips:"Деление куста каждые 3-4 года." },
+    planting:"Делёнки весной или осенью.", harvest:"Декоративное растение.", season:"Весна-Лето"
+  },
+  {
+    id:23, name:"Пион", latin:"Paeonia", emoji:"🌸", category:"садовые", difficulty:2,
+    description:"Пышные ароматные цветы, цветущие весной. Многолетники, живущие десятилетиями.",
+    care:{ watering:"Умеренный полив 1-2 раза в неделю.", light:"Полное солнце. 6+ часов.", soil:"Плодородная, нейтральная, с дренажом.", temperature:"Морозостойка до -35°C.", fertilizer:"Весной фосфорно-калийные удобрения.", diseases:"Серая гниль, ржавчина.", tips:"Заглубление почек при посадке — не более 3-5 см." },
+    planting:"Делёнки в сентябре-октябре.", harvest:"Декоративное растение.", season:"Весна"
+  },
+  {
+    id:24, name:"Ирис", latin:"Iris", emoji:"💙", category:"садовые", difficulty:2,
+    description:"Изысканные цветы с необычной формой. Около 300 видов разных окрасок.",
+    care:{ watering:"Умеренный полив. Избегайте застоя.", light:"Полное солнце или полутень.", soil:"Рыхлая, слабощелочная.", temperature:"Морозостойка.", fertilizer:"Калийно-фосфорные перед цветением.", diseases:"Корневая гниль, бактериоз.", tips:"Деление каждые 3-4 года после цветения." },
+    planting:"Корневища в августе-сентябре.", harvest:"Декоративное растение.", season:"Весна-Лето"
+  },
+  {
+    id:25, name:"Роза", latin:"Rosa", emoji:"🌹", category:"цветы", difficulty:3,
+    description:"Королева цветов. Более 30 000 сортов разных форм и окрасок.",
+    care:{ watering:"Обильный полив 2-3 раза в неделю под корень.", light:"Полное солнце — минимум 6 часов.", soil:"Плодородная, нейтральная, pH 6.0-6.5.", temperature:"Морозостойка. Укрывайте на зиму.", fertilizer:"Каждые 2 недели в период роста.", diseases:"Мучнистая роса, чёрная пятнистость.", tips:"Совместимость с лавандой — отпугивает вредителей." },
+    planting:"Саженцы осенью или весной.", harvest:"Срезка цветков в утренние часы.", season:"Весна-Лето"
+  },
+  {
+    id:26, name:"Тюльпан", latin:"Tulipa", emoji:"🌷", category:"цветы", difficulty:1,
+    description:"Весенние луковичные цветы. Символ Нидерландов и весеннего обновления.",
+    care:{ watering:"Умеренный полив в период роста.", light:"Полное солнце.", soil:"Рыхлая, плодородная, с дренажем.", temperature:"Морозостойка. Зимовка в грунте.", fertilizer:"Подкормка при высадке и при появлении всходов.", diseases:"Серая гниль, фузариоз.", tips:"Выкапывайте луковицы после увядания ботвы." },
+    planting:"Луковицы в октябре-ноябре.", harvest:"Декоративное растение.", season:"Весна"
+  },
+  {
+    id:27, name:"Хризантема", latin:"Chrysanthemum", emoji:"🏵️", category:"цветы", difficulty:2,
+    description:"Осенние цветы, радующие после увядания других. Множество форм и размеров.",
+    care:{ watering:"Регулярный полив. Не попадать на соцветия.", light:"Полное солнце.", soil:"Плодородная, рыхлая.", temperature:"Морозостойка (в зависимости от сорта).", fertilizer:"Каждые 2 недели в период роста.", diseases:"Мучнистая роса, тля.", tips:"Прищипывание до середины июля для пышного цветения." },
+    planting:"Саженцы весной или черенки в марте.", harvest:"Декоративное растение.", season:"Осень"
+  },
+  {
+    id:28, name:"Лилия", latin:"Lilium", emoji:"🌺", category:"цветы", difficulty:2,
+    description:"Величественные ароматные цветы. До 100 видов в дикой природе.",
+    care:{ watering:"Регулярный полив под корень.", light:"Полное солнце или полутень.", soil:"Рыхлая, питательная, с дренажом.", temperature:"Морозостойка.", fertilizer:"Азот весной, фосфор-калий летом.", diseases:"Лиловый жук, фузариоз.", tips:"Мульчирование предохраняет луковицы от перегрева." },
+    planting:"Луковицы в сентябре-октябре.", harvest:"Декоративное растение.", season:"Лето"
+  },
+  {
+    id:29, name:"Яблоня", latin:"Malus domestica", emoji:"🍎", category:"деревья", difficulty:3,
+    description:"Плодовое дерево с одними из самых популярных фруктов в мире.",
+    care:{ watering:"Регулярный полив молодых. Взрослые — в засуху.", light:"Полное солнце — 6-8 часов.", soil:"Плодородная, хорошо дренированная.", temperature:"Морозостойка. Плодоношение лучше при перепадах.", fertilizer:"Азот весной, фосфор-калий летом и осенью.", diseases:"Парша, мучнистая роса, плодовая гниль.", tips:"Формирующая обрезка с первого года." },
+    planting:"Саженцы осенью или весной. Схема 4×4 м.", harvest:"Плодоношение через 3-5 лет.", season:"Осень"
+  },
+  {
+    id:30, name:"Вишня", latin:"Prunus cerasus", emoji:"🍒", category:"деревья", difficulty:2,
+    description:"Плодовое дерево с кисло-сладкими ягодами. Неприхотлива и урожайна.",
+    care:{ watering:"Умеренный полив. Засухоустойчива.", light:"Полное солнце.", soil:"Плодородная, средней влажности.", temperature:"Морозостойка. Плохо переносит оттепели.", fertilizer:"Азот весной, калий-фосфор летом.", diseases:"Коккомикоз, монилиоз, клястероспориоз.", tips:"Формирующая обрезка — чашевидная или веретеновидная." },
+    planting:"Саженцы осенью (сентябрь-октябрь).", harvest:"Через 3-5 лет после посадки.", season:"Лето"
+  },
+  {
+    id:31, name:"Смородина", latin:"Ribes", emoji:"🫐", category:"деревья", difficulty:1,
+    description:"Кустарник с ароматными ягодами. Чёрная, красная и белая — разные вкусы.",
+    care:{ watering:"Регулярный полив, особенно в жару.", light:"Полное солнце или полутень.", soil:"Плодородная, влажная.", temperature:"Морозостойка до -30°C.", fertilizer:"Весной азот, после цветения калий-фосфор.", diseases:"Мучнистая роса, крыжовниковая огнёвка.", tips:"Ежегодная обрезка старых веток (старше 5 лет)." },
+    planting:"Саженцы осенью или весной.", harvest:"Через 2-3 года после посадки.", season:"Лето"
+  },
+  {
+    id:32, name:"Клубника", latin:"Fragaria × ananassa", emoji:"🍓", category:"овощи", difficulty:2,
+    description:"Самая популярная ягода в мире. Сладкая, ароматная, с витамином C.",
+    care:{ watering:"Регулярный полив под корень. Мульчирование.", light:"Полное солнце.", soil:"Плодородная, рыхлая, слабокислая.", temperature:"Морозостойка (с укрытием).", fertilizer:"Весной азот, после плодоношения калий-фосфор.", diseases:"Серая гниль, земляничный клещ.", tips:"Удаляйте усы — они ослабляют растение." },
+    planting:"Рассада в августе-сентябре.", harvest:"Через год после посадки.", season:"Лето"
+  },
+  {
+    id:33, name:"Виноград", latin:"Vitis vinifera", emoji:"🍇", category:"деревья", difficulty:3,
+    description:"Лиановидная лоза со сладкими ягодами. Основа виноделия и один из древнейших культурных видов.",
+    care:{ watering:"Умеренный полив. Обильный в период налива ягод.", light:"Максимум солнца.", soil:"Рыхлая, каменистая, с хорошим дренажем.", temperature:"Морозостойка (в зависимости от сорта).", fertilizer:"Подкормка органикой и минеральными удобрениями.", diseases:"Милдью, оидиум, филлоксера.", tips:"Формировка штамба или шпалеры обязательна." },
+    planting:"Саженцы осенью или весной.", harvest:"Через 3-4 года после посадки.", season:"Осень"
+  },
+  {
+    id:34, name:"Капуста белокочанная", latin:"Brassica oleracea", emoji:"🥗", category:"овощи", difficulty:2,
+    description:"Двухлетнее растение. Основаmany блюд и кладезь витаминов.",
+    care:{ watering:"Обильный полив 2-3 раза в неделю.", light:"Полное солнце.", soil:"Плодородная, влажная, с нейтральной реакцией.", temperature:"Холодостойка. Оптимально 15-20°C.", fertilizer:"Три подкормки: после высадки, через 2 недели, в начале формирования кочана.", diseases:"Кила, чёрная ножка, капустная белянка.", tips:"Притенение от полуденного солнца в жару." },
+    planting:"Рассада в марте, высадка в апреле-мае.", harvest:"Через 60-120 дней в зависимости от сорта.", season:"Лето-Осень"
+  },
+  {
+    id:35, name:"Кабачок", latin:"Cucurbita pepo", emoji:"🫛", category:"овощи", difficulty:1,
+    description:"Неприхотливое однолетнее растение. Один из самых урожайных овощей на участке.",
+    care:{ watering:"Обильный полив 1-2 раза в неделю.", light:"Полное солнце.", soil:"Плодородная, влагоёмкая.", temperature:"Теплолюбив. 22-28°C.", fertilizer:"Подкормка через 2 недели после высадки.", diseases:"Бактериоз, мучнистая роса.", tips:"Сбор каждые 2-3 дня — переросшие теряют вкус." },
+    planting:"Рассада в мае или семена в грунт.", harvest:"Через 40-50 дней.", season:"Лето"
+  },
+  {
+    id:36, name:"Перец", latin:"Capsicum annuum", emoji:"🫑", category:"овощи", difficulty:2,
+    description:"Однолетнее растение с толстыми мясистыми плодами. Богат витамином C.",
+    care:{ watering:"Регулярный полив 1-2 раза в неделю.", light:"Полное солнце — 8+ часов.", soil:"Плодородная, рыхлая, pH 6.0-7.0.", temperature:"Теплолюбив. 22-28°C.", fertilizer:"Каждые 2 недели комплексным удобрением.", diseases:"Чёрная ножка, вертициллёз, тля.", tips:"Пасынкование повышает урожай крупных плодов." },
+    planting:"Рассада с февраля. Высадка в мае.", harvest:"Через 70-100 дней после высадки.", season:"Лето"
+  },
+  {
+    id:37, name:"Баклажан", latin:"Solanum melongena", emoji:"🍆", category:"овощи", difficulty:3,
+    description:"Теплолюбивое растение из семейства паслёновых. Требовательный, но вкусный.",
+    care:{ watering:"Обильный полив 2-3 раза в неделю.", light:"Полное солнце — 8+ часов.", soil:"Плодородная, влагоёмкая, pH 6.0-6.8.", temperature:"Очень теплолюбив. 25-30°C.", fertilizer:"Каждые 2 недели, особенно калий.", diseases:"Фитофтороз, колорадский жук, паутинный клещ.", tips:"Формирование в 1-2 стебля. Пасынкование обязательно." },
+    planting:"Рассада с февраля. Высадка в мае-июне.", harvest:"Через 100-150 дней.", season:"Лето"
+  },
+  {
+    id:38, name:"Редис", latin:"Raphanus sativus", emoji:"🔴", category:"овощи", difficulty:1,
+    description:"Самый скороспелый корнеплод. Готов к употреблению через 3-4 недели.",
+    care:{ watering:"Регулярный полив. Пересыхание — горечь.", light:"Полное солнце или полутень.", soil:"Рыхлая, плодородная.", temperature:"Холодостойка. Оптимально 15-20°C.", fertilizer:"Не нужен при правильной почве.", diseases:"Кила, чёрная ножка.", tips:"Посев каждые 10-14 дней для непрерывного урожая." },
+    planting:"Посев в апреле-мае и августе.", harvest:"Через 25-35 дней.", season:"Весна-Осень"
+  },
+  {
+    id:39, name:"Чеснок", latin:"Allium sativum", emoji:"🧄", category:"овощи", difficulty:1,
+    description:"Двулетнее растение с острым запахом и вкусом. Незаменим в кулинарии и медицине.",
+    care:{ watering:"Умеренный полив. В засуху — чаще.", light:"Полное солнце.", soil:"Плодородная, рыхлая, нейтральная.", temperature:"Морозостойка. Зимний — через месяц после высадки.", fertilizer:"Азот весной, калий-фосфор в мае.", diseases:"Ржавчина, фузариоз, бактериоз.", tips:"Мульчирование соломой предотвращает сорняки." },
+    planting:"Зубчики в октябре-ноябре (озимый) или марте (яровой).", harvest:"В июле-августе, когда пожелтеет ботва.", season:"Лето"
+  },
+  {
+    id:40, name:"Петрушка", latin:"Petroselinum crispum", emoji:"🌿", category:"травы", difficulty:1,
+    description:"Двухлетняя ароматная трава. Богата витамином C, железом и кальцием.",
+    care:{ watering:"Регулярный полив. Не любит пересыхание.", light:"Полное солнце или полутень.", soil:"Плодородная, рыхлая.", temperature:"Холодостойка. Всходы при 3-5°C.", fertilizer:"Не обязательна. Компост при посадке.", diseases:"Ржавчина, церкоспороз.", tips:"Перед посевом замочите семена на сутки." },
+    planting:"Посев семян в мае прямо в грунт.", harvest:"Зелень через 40-50 дней, корни через 80-100.", season:"Весна-Лето"
+  },
+  {
+    id:41, name:"Шалфей", latin:"Salvia officinalis", emoji:"🌿", category:"травы", difficulty:1,
+    description:"Многолетнее лекарственное растение с серебристыми ароматными листьями.",
+    care:{ watering:"Умеренный полив. Засухоустойчив.", light:"Полное солнце.", soil:"Рыхлая, слабощелочная, суховатая.", temperature:"Морозостойка до -20°C.", fertilizer:"Минимальная подкормка.", diseases:"Корневая гниль при застое воды.", tips:"Обрезка после цветения для поддержания формы." },
+    planting:"Черенки или семена в марте-апреле.", harvest:"Листья до цветения — максимальный аромат.", season:"Лето"
+  },
+  {
+    id:42, name:"Розмарин", latin:"Salvia rosmarinus", emoji:"🌿", category:"травы", difficulty:2,
+    description:"Вечнозелёное ароматное растение. Незаменим в средиземноморской кухне.",
+    care:{ watering:"Редкий полив. Засухоустойчив.", light:"Полное солнце.", soil:"Рыхлая, песчаная, с дренажом.", temperature:"Морозостойка до -15°C.", fertilizer:"Минимальная подкормка.", diseases:"Корневая гниль от перелива.", tips:"В теплице или контейнере в холодных регионах." },
+    planting:"Черенки в мае-июне или семена весной.", harvest:"Веточки по мере роста.", season:"Круглый год"
+  },
+  {
+    id:43, name:"Тимьян", latin:"Thymus vulgaris", emoji:"🌿", category:"травы", difficulty:1,
+    description:"Многолетнее стелющееся растение с мелкими ароматными листьями.",
+    care:{ watering:"Редкий полив. Засухоустойчив.", light:"Полное солнце.", soil:"Рыхлая, песчаная, с дренажом.", temperature:"Морозостойка до -30°C.", fertilizer:"Не нужен.", diseases:"Практически не поражается.", tips:"Отличный почвопокровник для альпинариев." },
+    planting:"Черенки весной или семена.", harvest:"Сбор перед цветением.", season:"Лето"
+  },
+  {
+    id:44, name:"Куркума", latin:"Curcuma longa", emoji:"🟡", category:"травы", difficulty:3,
+    description:"Тропическое растение, корень которого используется как пряность и лекарство.",
+    care:{ watering:"Обильный полив. Любит влажность.", light:"Яркий рассеянный свет.", soil:"Плодородная, влажная, рыхлая.", temperature:"Теплолюбив. 25-30°C.", fertilizer:"Каждые 2 недели.", diseases:"Корневая гниль при переувлажнении.", tips:"Комнатное выращивание в умеренном климате." },
+    planting:"Корневища в начале весны.", harvest:"Через 8-10 месяцев.", season:"Круглый год"
+  },
+  {
+    id:45, name:"Имбирь", latin:"Zingiber officinale", emoji:"🟤", category:"травы", difficulty:3,
+    description:"Тропическое растение. Корень используется в кулинарии и медицине.",
+    care:{ watering:"Регулярный полив. Не заливать.", light:"Яркий рассеянный свет.", soil:"Плодородная, рыхлая, влагоёмкая.", temperature:"Теплолюбив. 25-30°C.", fertilizer:"Каждые 2 недели.", diseases:"Корневая гниль.", tips:"Комнатное выращивание в горшке." },
+    planting:"Кусочки корневища с почками в горшок.", harvest:"Через 8-10 месяцев.", season:"Круглый год"
+  },
+  {
+    id:46, name:"Гвоздика", latin:"Dianthus", emoji:"🌺", category:"цветы", difficulty:2,
+    description:"Ароматные цветы на длинных стеблях. Множество видов — от однолетних до многолетних.",
+    care:{ watering:"Умеренный полив под корень.", light:"Полное солнце.", soil:"Рыхлая, питательная, с дренажом.", temperature:"Морозостойка (многолетники).", fertilizer:"Комплексное удобрение в период роста.", diseases:"Фузариоз, ржавчина.", tips:"Прищипывание верхушек для кустистости." },
+    planting:"Семена или черенки весной.", harvest:"Декоративное растение.", season:"Лето"
+  },
+  {
+    id:47, name:"Нарцисс", latin:"Narcissus", emoji:"💛", category:"цветы", difficulty:1,
+    description:"Весенние луковичные цветы с характерным ароматом. Морозостойкие и неприхотливые.",
+    care:{ watering:"Умеренный полив в период роста.", light:"Полное солнце или полутень.", soil:"Плодородная, влажная.", temperature:"Морозостойка. Зимовка в грунте.", fertilizer:"Подкормка при высадке.", diseases:"Серая гниль, стагоноспороз.", tips:"Не срезайте листья до полного увядания." },
+    planting:"Луковицы в сентябре-октябре.", harvest:"Декоративное растение.", season:"Весна"
+  },
+  {
+    id:48, name:"Клематис", latin:"Clematis", emoji:"💎", category:"цветы", difficulty:3,
+    description:"Лиановидые цветущие растения с крупными красивыми цветами.",
+    care:{ watering:"Регулярный полив под корень. Мульчирование.", light:"Голова на солнце, ноги в тени.", soil:"Плодородная, щелочная, с дренажом.", temperature:"Морозостойка (в зависимости от группы обрезки).", fertilizer:"Каждые 2 недели в период роста.", diseases:"Увядание клематисов, мучнистая роса.", tips:"Глубокая посадка — заглубление корневой шейки." },
+    planting:"Саженцы весной или осенью.", harvest:"Декоративное растение.", season:"Лето"
+  },
+  {
+    id:49, name:"Гортензия", latin:"Hydrangea", emoji:"💠", category:"цветы", difficulty:2,
+    description:"Пышные соцветия, меняющие цвет в зависимости от кислотности почвы.",
+    care:{ watering:"Регулярный обильный полив.", light:"Полутень. Прямое солнце — утреннее.", soil:"Кислая, плодородная, влажная.", temperature:"Морозостойка.", fertilizer:"Каждые 2 недели азотно-калийными.", diseases:"Мучнистая роса, хлороз.", tips:"Синий цвет — на кислой почве с сульфатом алюминия." },
+    planting:"Саженцы весной или осенью.", harvest:"Декоративное растение.", season:"Лето"
+  },
+  {
+    id:50, name:"Лавр (лавровый лист)", latin:"Laurus nobilis", emoji:"🌿", category:"деревья", difficulty:2,
+    description:"Вечнозелёное пряное дерево. Листья — основная приправа в супах и маринадах.",
+    care:{ watering:"Умеренный полив.", light:"Полное солнце или полутень.", soil:"Рыхлая, плодородная, с дренажом.", temperature:"Морозостойка до -15°C. В контейнере — убирать на зиму.", fertilizer:"Каждые 2 недели в период роста.", diseases:"Щитовка, мучнистая роса.", tips:"Формирующая обрезка для кустистости." },
+    planting:"Черенки весной или семена.", harvest:"Листья по мере роста. Сушка в тени.", season:"Круглый год"
+  },
+  {
+    id:51, name:"Облепиха", latin:"Hippophae rhamnoides", emoji:"🟠", category:"деревья", difficulty:2,
+    description:"Колючий кустарник с яркими оранжевыми ягодами. Невероятно полезная и морозостойкая.",
+    care:{ watering:"Умеренный полив в засуху.", light:"Полное солнце.", soil:"Рыхлая, песчаная.", temperature:"Морозостойка до -40°C.", fertilizer:"Минимальная подкормка.", diseases:"Корневая гниль при застое воды.", tips:"Мужские и женские растения — нужны оба для урожая." },
+    planting:"Саженцы весной или осенью.", harvest:"Через 3-4 года. Сбор в августе-сентябре.", season:"Осень"
+  },
+  {
+    id:52, name:"Слива", latin:"Prunus domestica", emoji:"🟣", category:"деревья", difficulty:2,
+    description:"Плодовое дерево с сочными сладкими плодами. Множество сортов для разных регионов.",
+    care:{ watering:"Умеренный полив в засуху.", light:"Полное солнце.", soil:"Плодородная, влажная.", temperature:"Морозостойка.", fertilizer:"Весной азот, летом калий-фосфор.", diseases:"Клястероспориоз, монилиоз, плодожорка.", tips:"Ежегодная обрезка — удаление загущающих веток." },
+    planting:"Саженцы осенью или весной.", harvest:"Через 3-5 лет.", season:"Лето"
+  },
+  {
+    id:53, name:"Груша", latin:"Pyrus communis", emoji:"🍐", category:"деревья", difficulty:3,
+    description:"Плодовое дерево со сладкими ароматными плодами. Требовательна к уходу.",
+    care:{ watering:"Регулярный полив молодых деревьев.", light:"Полное солнце.", soil:"Плодородная, средней влажности.", temperature:"Морозостойка.", fertilizer:"Комплексная подкормка весной и летом.", diseases:"Парша, галловый клещ, плодовая гниль.", tips:"Формирующая обрезка — раскидистая крона." },
+    planting:"Саженцы осенью или весной.", harvest:"Через 5-8 лет.", season:"Осень"
+  },
+  {
+    id:54, name:"Ежевика", latin:"Rubus fruticosus", emoji:"🫐", category:"деревья", difficulty:2,
+    description:"Колючий кустарник с тёмными сладкими ягодами. Дикая и садовая формы.",
+    care:{ watering:"Регулярный полив.", light:"Полное солнце.", soil:"Плодородная, кислая, влажная.", temperature:"Морозостойка.", fertilizer:"Весной азот, после плодоношения калий-фосфор.", diseases:"Антракноз, серая гниль.", tips:"Подвязка на шпалеру облегчает уход и сбор." },
+    planting:"Черенки весной или осенью.", harvest:"Через 2 года.", season:"Лето"
+  },
+  {
+    id:55, name:"Малина", latin:"Rubus idaeus", emoji:"🫐", category:"деревья", difficulty:1,
+    description:"Кустарник с ароматными красными ягодами. Неприхотлива и урожайна.",
+    care:{ watering:"Регулярный полив в засуху.", light:"Полное солнце или полутень.", soil:"Плодородная, рыхлая.", temperature:"Морозостойка до -30°C.", fertilizer:"Весной азот, осенью фосфор-калий.", diseases:"Пурпурная пятнистость, малиновый жук.", tips:"Вырезайте отплодоносившие побеги до земли." },
+    planting:"Саженцы осенью или весной.", harvest:"Через год после посадки.", season:"Лето"
+  },
+  {
+    id:56, name:"Крыжовник", latin:"Ribes uva-crispa", emoji:"🟢", category:"деревья", difficulty:1,
+    description:"Колючий кустарник с кисло-сладкими ягодами. Богат витамином C.",
+    care:{ watering:"Умеренный полив.", light:"Полное солнце.", soil:"Плодородная, средней влажности.", temperature:"Морозостойка до -35°C.", fertilizer:"Весной азот, после цветения калий-фосфор.", diseases:"Мучнистая роса, огнёвка.", tips:"Ежегодная санитарная и формирующая обрезка." },
+    planting:"Саженцы осенью (сентябрь-октябрь).", harvest:"Через 2-3 года.", season:"Лето"
+  },
+  {
+    id:57, name:"Горох", latin:"Pisum sativum", emoji:"🟢", category:"овощи", difficulty:1,
+    description:"Бобовое однолетнее растение. Стручки с семенами — вкусный и полезный продукт.",
+    care:{ watering:"Регулярный полив, особенно в период цветения.", light:"Полное солнце или полутень.", soil:"Плодородная, рыхлая. Не любит свежий навоз.", temperature:"Холодостойка. Оптимально 15-20°C.", fertilizer:"Азот не нужен — бобовые фиксируют азот.", diseases:"Мучнистая роса, гороховая зерновка.", tips:"Подвязка к опоре обязательна." },
+    planting:"Посев семян в апреле-мае.", harvest:"Через 50-70 дней.", season:"Весна-Лето"
+  },
+  {
+    id:58, name:"Фасоль", latin:"Phaseolus vulgaris", emoji:"🫛", category:"овощи", difficulty:1,
+    description:"Бобовое растение. Стручковая (зелёная) и зерновая — разные виды употребления.",
+    care:{ watering:"Регулярный полив.", light:"Полное солнце.", soil:"Плодородная, рыхлая, без свежего навоза.", temperature:"Теплолюбив. Не ниже 15°C.", fertilizer:"Азот не нужен. Калий во время цветения.", diseases:"Антракноз, бактериальная пятнистость.", tips:"Собирайте стручковую до полной спелости зёрен." },
+    planting:"Посев в мае, когда почва прогреется до 15°C.", harvest:"Стручковая через 50-60 дней, зерновая через 60-80.", season:"Лето"
+  },
+  {
+    id:59, name:"Патиссон", latin:"Cucurbita pepo var. patisson", emoji:"🟡", category:"овощи", difficulty:2,
+    description:"Разновидность тыквенных с тарелкообразными плодами. Нежный вкус и низкая калорийность.",
+    care:{ watering:"Обильный полив 1-2 раза в неделю.", light:"Полное солнце.", soil:"Плодородная, влагоёмкая.", temperature:"Теплолюбив. 22-28°C.", fertilizer:"Комплексная подкормка каждые 2 недели.", diseases:"Мучнистая роса, бактериоз.", tips:"Сбор молодых плодов стимулирует образование новых." },
+    planting:"Рассада в мае или семена в грунт.", harvest:"Через 40-50 дней.", season:"Лето"
+  },
+  {
+    id:60, name:"Горошек душистый", latin:"Lathyrus odoratus", emoji:"🌸", category:"цветы", difficulty:1,
+    description:"Ароматные однолетние цветы-лианы для вертикального озеленения.",
+    care:{ watering:"Регулярный полив.", light:"Полное солнце.", soil:"Плодородная, рыхлая.", temperature:"Холодостойка. Оптимально 15-20°C.", fertilizer:"Комплексное удобрение каждые 2 недели.", diseases:"Мучнистая роса, корневая гниль.", tips:"Прищипывание верхушек для кустистости." },
+    planting:"Семена в апреле-мае.", harvest:"Декоративное растение. Цветение с июня.", season:"Лето"
   }
 ];
 </script>
-  <script>/* ─── STATE ─── */
-let currentUser = null;
-let currentCategory = 'all';
-let selectedMood = '😊';
-let calendarDate = new Date();
-let selectedCalDate = null;
-let adminUnlocked = false;
-const ADMIN_PASSWORD = 'plantifi2026';
+  <script>let currentUser=null,currentCategory='all',selectedMood='😊',calendarDate=new Date(),selectedCalDate=null;
 
-/* ─── INIT ─── */
-document.addEventListener('DOMContentLoaded', () => {
-  currentUser = JSON.parse(localStorage.getItem('plantifi_user'));
-  updateUI();
-  renderCatalog();
-  renderJournal();
-  renderNotes();
-  renderProposals();
-  renderCalendar();
-  renderCommunity();
-  document.getElementById('journalDate').value = new Date().toISOString().split('T')[0];
+document.addEventListener('DOMContentLoaded',()=>{
+  currentUser=JSON.parse(localStorage.getItem('plantifi_user'));
+  updateUI();renderCatalog();renderJournal();renderNotes();renderCalendar();renderCommunity();
+  document.getElementById('journalDate').value=new Date().toISOString().split('T')[0];
 });
 
-/* ─── AUTH ─── */
-function toggleAuth() {
-  if (currentUser) {
-    if (confirm('Выйти из аккаунта?')) {
-      currentUser = null;
-      localStorage.removeItem('plantifi_user');
-      updateUI();
-    }
-  } else {
-    document.getElementById('authModal').classList.remove('hidden');
-  }
+function toggleAuth(){
+  if(currentUser){if(confirm('Выйти из аккаунта?')){currentUser=null;localStorage.removeItem('plantifi_user');updateUI()}}
+  else document.getElementById('authModal').classList.remove('hidden');
 }
-
-function showRegister() {
-  document.getElementById('authLoginForm').classList.add('hidden');
-  document.getElementById('authRegisterForm').classList.remove('hidden');
-  document.getElementById('authTitle').textContent = 'Регистрация';
+function showRegister(){document.getElementById('authLoginForm').classList.add('hidden');document.getElementById('authRegisterForm').classList.remove('hidden');document.getElementById('authTitle').textContent='Регистрация'}
+function showLogin(){document.getElementById('authRegisterForm').classList.add('hidden');document.getElementById('authLoginForm').classList.remove('hidden');document.getElementById('authTitle').textContent='Вход'}
+function register(){
+  const u=document.getElementById('regUsername').value.trim(),p=document.getElementById('regPassword').value;
+  if(!u||!p){alert('Заполните все поля');return}
+  const users=JSON.parse(localStorage.getItem('plantifi_users')||'{}');
+  if(users[u]){alert('Пользователь уже существует');return}
+  users[u]={password:p,email:document.getElementById('regEmail').value,joined:new Date().toISOString()};
+  localStorage.setItem('plantifi_users',JSON.stringify(users));
+  currentUser={username:u};localStorage.setItem('plantifi_user',JSON.stringify(currentUser));
+  closeModal('authModal');updateUI();
 }
-
-function showLogin() {
-  document.getElementById('authRegisterForm').classList.add('hidden');
-  document.getElementById('authLoginForm').classList.remove('hidden');
-  document.getElementById('authTitle').textContent = 'Вход';
+function login(){
+  const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value;
+  const users=JSON.parse(localStorage.getItem('plantifi_users')||'{}');
+  if(users[u]&&users[u].password===p){currentUser={username:u};localStorage.setItem('plantifi_user',JSON.stringify(currentUser));closeModal('authModal');updateUI()}
+  else alert('Неверное имя пользователя или пароль');
 }
-
-function register() {
-  const username = document.getElementById('regUsername').value.trim();
-  const password = document.getElementById('regPassword').value;
-  if (!username || !password) { alert('Заполните все поля'); return; }
-  const users = JSON.parse(localStorage.getItem('plantifi_users') || '{}');
-  if (users[username]) { alert('Пользователь уже существует'); return; }
-  users[username] = { password, email: document.getElementById('regEmail').value, joined: new Date().toISOString() };
-  localStorage.setItem('plantifi_users', JSON.stringify(users));
-  currentUser = { username };
-  localStorage.setItem('plantifi_user', JSON.stringify(currentUser));
-  closeModal('authModal');
-  updateUI();
-}
-
-function login() {
-  const username = document.getElementById('loginUsername').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const users = JSON.parse(localStorage.getItem('plantifi_users') || '{}');
-  if (users[username] && users[username].password === password) {
-    currentUser = { username };
-    localStorage.setItem('plantifi_user', JSON.stringify(currentUser));
-    closeModal('authModal');
-    updateUI();
-  } else {
-    alert('Неверное имя пользователя или пароль');
-  }
-}
-
-function updateUI() {
-  const greeting = document.getElementById('userGreeting');
-  const authBtn = document.getElementById('authBtn');
-  if (currentUser) {
-    greeting.textContent = `👤 ${currentUser.username}`;
-    authBtn.textContent = 'Выйти';
-  } else {
-    greeting.textContent = '';
-    authBtn.textContent = 'Войти';
-  }
+function updateUI(){
+  const g=document.getElementById('userGreeting'),b=document.getElementById('authBtn');
+  if(currentUser){g.textContent='👤 '+currentUser.username;b.textContent='Выйти'}else{g.textContent='';b.textContent='Войти'}
   updateCalendarForm();
 }
-
-/* ─── NAVIGATION ─── */
-function showSection(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-  document.getElementById(name + 'Section').classList.remove('hidden');
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+function showSection(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(name+'Section').classList.remove('hidden');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
   document.querySelector(`.nav-link[data-section="${name}"]`).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+function toggleMenu(){document.querySelector('.nav-links').classList.toggle('show')}
+function closeModal(id){document.getElementById(id).classList.add('hidden')}
+document.querySelectorAll('.modal').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.add('hidden')})});
 
-function toggleMenu() {
-  document.querySelector('.nav-links').classList.toggle('show');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-}
-
-document.querySelectorAll('.modal').forEach(modal => {
-  modal.addEventListener('click', e => {
-    if (e.target === modal) modal.classList.add('hidden');
-  });
-});
-
-/* ─── CATALOG ─── */
-function renderCatalog() {
-  const grid = document.getElementById('plantGrid');
-  grid.innerHTML = PLANTS.map(p => `
+function renderCatalog(){
+  document.getElementById('plantGrid').innerHTML=PLANTS.map(p=>`
     <div class="plant-card" onclick="openPlant(${p.id})">
-      <div class="plant-card-img">
-        ${p.emoji}
-        <span class="plant-card-category">${p.category}</span>
-      </div>
+      <div class="plant-card-img">${p.emoji}<span class="plant-card-category">${p.category}</span></div>
       <div class="plant-card-body">
-        <h3>${p.name}</h3>
-        <p>${p.description}</p>
+        <h3>${p.name}</h3><p>${p.description}</p>
         <div class="plant-card-meta">
           <span class="plant-meta-item">🌱 ${p.season}</span>
           <span class="plant-meta-item">🎯 Сложность:</span>
-          <div class="plant-difficulty">
-            ${Array(3).fill(0).map((_, i) => `<div class="diff-dot ${i < p.difficulty ? 'filled' : ''}"></div>`).join('')}
-          </div>
+          <div class="plant-difficulty">${Array(3).fill(0).map((_,i)=>`<div class="diff-dot ${i<p.difficulty?'filled':''}"></div>`).join('')}</div>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
-function filterPlants() {
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  const cards = document.querySelectorAll('.plant-card');
-  PLANTS.forEach((p, i) => {
-    const matchSearch = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.latin.toLowerCase().includes(query);
-    const matchCat = currentCategory === 'all' || p.category === currentCategory;
-    cards[i].style.display = (matchSearch && matchCat) ? '' : 'none';
+function filterPlants(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.plant-card').forEach((c,i)=>{
+    const p=PLANTS[i];
+    c.style.display=((p.name.toLowerCase().includes(q)||p.description.toLowerCase().includes(q)||p.latin.toLowerCase().includes(q))&&(currentCategory==='all'||p.category===currentCategory))?'':'none';
   });
 }
+function filterByCategory(cat,btn){currentCategory=cat;document.querySelectorAll('.filter-tag').forEach(t=>t.classList.remove('active'));btn.classList.add('active');filterPlants()}
 
-function filterByCategory(cat, btn) {
-  currentCategory = cat;
-  document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  filterPlants();
-}
-
-/* ─── PLANT DETAIL ─── */
-function openPlant(id) {
-  const p = PLANTS.find(x => x.id === id);
-  if (!p) return;
-
-  const content = document.getElementById('plantDetailContent');
-  content.innerHTML = `
+function openPlant(id){
+  const p=PLANTS.find(x=>x.id===id);if(!p)return;
+  document.getElementById('plantDetailContent').innerHTML=`
     <div class="plant-detail">
       <div class="plant-detail-header">
         <div class="plant-detail-emoji">${p.emoji}</div>
         <div class="plant-detail-info">
-          <h1>${p.name}</h1>
-          <div class="latin">${p.latin}</div>
-          <div class="plant-tags">
-            <span class="plant-tag">${p.category}</span>
-            <span class="plant-tag">${p.season}</span>
-            <span class="plant-tag">Сложность: ${'●'.repeat(p.difficulty)}${'○'.repeat(3-p.difficulty)}</span>
-          </div>
+          <h1>${p.name}</h1><div class="latin">${p.latin}</div>
+          <div class="plant-tags"><span class="plant-tag">${p.category}</span><span class="plant-tag">${p.season}</span><span class="plant-tag">Сложность: ${'●'.repeat(p.difficulty)}${'○'.repeat(3-p.difficulty)}</span></div>
           <p>${p.description}</p>
         </div>
       </div>
-
       <div class="info-grid">
-        <div class="info-card">
-          <div class="icon">💧</div>
-          <div class="label">Полив</div>
-          <div class="value">${p.care.watering.split('.')[0]}</div>
-        </div>
-        <div class="info-card">
-          <div class="icon">☀️</div>
-          <div class="label">Освещение</div>
-          <div class="value">${p.care.light.split('.')[0]}</div>
-        </div>
-        <div class="info-card">
-          <div class="icon">🌡️</div>
-          <div class="label">Температура</div>
-          <div class="value">${p.care.temperature.split('.')[0]}</div>
-        </div>
-        <div class="info-card">
-          <div class="icon">🌱</div>
-          <div class="label">Посадка</div>
-          <div class="value">${p.planting.split('.')[0]}</div>
-        </div>
+        <div class="info-card"><div class="icon">💧</div><div class="label">Полив</div><div class="value">${p.care.watering.split('.')[0]}</div></div>
+        <div class="info-card"><div class="icon">☀️</div><div class="label">Освещение</div><div class="value">${p.care.light.split('.')[0]}</div></div>
+        <div class="info-card"><div class="icon">🌡️</div><div class="label">Температура</div><div class="value">${p.care.temperature.split('.')[0]}</div></div>
+        <div class="info-card"><div class="icon">🌱</div><div class="label">Посадка</div><div class="value">${p.planting.split('.')[0]}</div></div>
       </div>
-
       <h3>🔍 Подробный уход</h3>
       <div class="detail-content">
-        <div class="tip-box">
-          <strong>💧 Полив:</strong> ${p.care.watering}
-        </div>
-        <div class="tip-box">
-          <strong>☀️ Освещение:</strong> ${p.care.light}
-        </div>
-        <div class="tip-box">
-          <strong>🌍 Почва:</strong> ${p.care.soil}
-        </div>
-        <div class="tip-box">
-          <strong>🌡️ Температура:</strong> ${p.care.temperature}
-        </div>
-        <div class="tip-box">
-          <strong>🧪 Удобрения:</strong> ${p.care.fertilizer}
-        </div>
-        <div class="tip-box warning">
-          <strong>⚠️ Болезни и вредители:</strong> ${p.care.diseases}
-        </div>
-        <div class="tip-box">
-          <strong>💡 Советы:</strong> ${p.care.tips}
-        </div>
+        <div class="tip-box"><strong>💧 Полив:</strong> ${p.care.watering}</div>
+        <div class="tip-box"><strong>☀️ Освещение:</strong> ${p.care.light}</div>
+        <div class="tip-box"><strong>🌍 Почва:</strong> ${p.care.soil}</div>
+        <div class="tip-box"><strong>🌡️ Температура:</strong> ${p.care.temperature}</div>
+        <div class="tip-box"><strong>🧪 Удобрения:</strong> ${p.care.fertilizer}</div>
+        <div class="tip-box warning"><strong>⚠️ Болезни:</strong> ${p.care.diseases}</div>
+        <div class="tip-box"><strong>💡 Советы:</strong> ${p.care.tips}</div>
       </div>
-
-      <h3>📅 Сроки</h3>
-      <div class="detail-content">
-        <p><strong>Посадка:</strong> ${p.planting}</p>
-        <p><strong>Сбор урожая:</strong> ${p.harvest}</p>
-      </div>
-
-      ${currentUser ? `
-        <div class="propose-btn">
-          <button class="btn btn-primary" onclick="openPropose(${p.id})">✏️ Предложить изменение</button>
-        </div>
-      ` : '<p style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem">Войдите, чтобы предлагать изменения</p>'}
-    </div>
-  `;
+      <h3>📅 Сроки</h3><div class="detail-content"><p><strong>Посадка:</strong> ${p.planting}</p><p><strong>Сбор:</strong> ${p.harvest}</p></div>
+    </div>`;
   document.getElementById('plantModal').classList.remove('hidden');
 }
 
-/* ─── PROPOSE ─── */
-function openPropose(plantId) {
-  document.getElementById('proposePlantId').value = plantId;
-  document.getElementById('proposeText').value = '';
-  document.getElementById('proposeModal').classList.remove('hidden');
-}
-
-function submitProposal() {
-  if (!currentUser) { alert('Войдите в аккаунт'); return; }
-  const plantId = parseInt(document.getElementById('proposePlantId').value);
-  const field = document.getElementById('proposeField').value;
-  const text = document.getElementById('proposeText').value.trim();
-  if (!text) { alert('Введите текст предложения'); return; }
-
-  const proposals = JSON.parse(localStorage.getItem('plantifi_proposals') || '[]');
-  proposals.push({
-    id: Date.now(),
-    plantId,
-    field,
-    text,
-    author: currentUser.username,
-    status: 'pending',
-    date: new Date().toISOString()
-  });
-  localStorage.setItem('plantifi_proposals', JSON.stringify(proposals));
-  closeModal('proposeModal');
-  alert('Предложение отправлено! Спасибо за вклад.');
-  renderProposals();
-}
-
-/* ─── JOURNAL ─── */
-function renderJournal() {
+function renderJournal(){
   updateJournalSelect();
-  const entries = JSON.parse(localStorage.getItem(`plantifi_journal_${currentUser?.username || 'guest'}`) || '[]');
-  const container = document.getElementById('journalEntries');
-  container.innerHTML = entries.length === 0
-    ? '<p style="color:var(--text-muted);text-align:center;padding:2rem;">Пока нет записей. Начните наблюдение!</p>'
-    : entries.reverse().map(e => `
-      <div class="journal-entry">
-        <div class="journal-entry-header">
-          <span class="journal-entry-plant">${getPlantEmoji(e.plantId)} ${getPlantName(e.plantId)}</span>
-          <span class="journal-entry-mood">${e.mood}</span>
-          <span class="journal-entry-date">${formatDate(e.date)}</span>
-        </div>
-        <div class="journal-entry-text">${escapeHtml(e.text)}</div>
-        ${e.photo ? `<img src="${e.photo}" class="journal-entry-photo">` : ''}
-        <div class="journal-entry-actions">
-          <button class="btn btn-sm btn-danger" onclick="deleteJournal('${e.id}')">Удалить</button>
-        </div>
-      </div>
-    `).join('');
+  const entries=JSON.parse(localStorage.getItem(`plantifi_journal_${currentUser?.username||'guest'}`)||'[]');
+  document.getElementById('journalEntries').innerHTML=entries.length===0
+    ?'<p style="color:var(--text-muted);text-align:center;padding:2rem">Пока нет записей.</p>'
+    :entries.slice().reverse().map(e=>`<div class="journal-entry"><div class="journal-entry-header"><span class="journal-entry-plant">${getPlantEmoji(e.plantId)} ${getPlantName(e.plantId)}</span><span class="journal-entry-mood">${e.mood}</span><span class="journal-entry-date">${fmtDate(e.date)}</span></div><div class="journal-entry-text">${esc(e.text)}</div>${e.photo?`<img src="${e.photo}" class="journal-entry-photo">`:''}<div class="journal-entry-actions"><button class="btn btn-sm btn-danger" onclick="deleteJournal('${e.id}')">Удалить</button></div></div>`).join('');
 }
-
-function addJournalEntry() {
-  if (!currentUser) { alert('Войдите в аккаунт'); return; }
-  const plantId = document.getElementById('journalPlant').value;
-  const date = document.getElementById('journalDate').value;
-  const text = document.getElementById('journalText').value.trim();
-  if (!plantId || !text) { alert('Выберите растение и введите наблюдение'); return; }
-
-  const photoInput = document.getElementById('journalPhoto');
-  const saveEntry = (photoDataUrl) => {
-    const entries = JSON.parse(localStorage.getItem(`plantifi_journal_${currentUser.username}`) || '[]');
-    entries.push({
-      id: String(Date.now()),
-      plantId: parseInt(plantId),
-      date,
-      text,
-      mood: selectedMood,
-      photo: photoDataUrl || null
-    });
-    localStorage.setItem(`plantifi_journal_${currentUser.username}`, JSON.stringify(entries));
-    document.getElementById('journalText').value = '';
-    document.getElementById('photoPreview').classList.add('hidden');
-    renderJournal();
+function addJournalEntry(){
+  if(!currentUser){alert('Войдите в аккаунт');return}
+  const plantId=document.getElementById('journalPlant').value,date=document.getElementById('journalDate').value,text=document.getElementById('journalText').value.trim();
+  if(!plantId||!text){alert('Выберите растение и введите наблюдение');return}
+  const photoInput=document.getElementById('journalPhoto');
+  const save=(photo)=>{
+    const entries=JSON.parse(localStorage.getItem(`plantifi_journal_${currentUser.username}`)||'[]');
+    entries.push({id:String(Date.now()),plantId:+plantId,date,text,mood:selectedMood,photo:photo||null});
+    localStorage.setItem(`plantifi_journal_${currentUser.username}`,JSON.stringify(entries));
+    document.getElementById('journalText').value='';document.getElementById('photoPreview').classList.add('hidden');renderJournal();
   };
+  if(photoInput.files&&photoInput.files[0]){const r=new FileReader();r.onload=e=>save(e.target.result);r.readAsDataURL(photoInput.files[0])}else save();
+}
+function deleteJournal(id){const k=`plantifi_journal_${currentUser?.username||'guest'}`;const e=JSON.parse(localStorage.getItem(k)||'[]');localStorage.setItem(k,JSON.stringify(e.filter(x=>x.id!==id)));renderJournal()}
+function setMood(mood,btn){selectedMood=mood;document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function previewPhoto(ev){const r=new FileReader();r.onload=e=>{const img=document.getElementById('photoPreview');img.src=e.target.result;img.classList.remove('hidden')};r.readAsDataURL(ev.target.files[0])}
 
-  if (photoInput.files && photoInput.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (e) => saveEntry(e.target.result);
-    reader.readAsDataURL(photoInput.files[0]);
-  } else {
-    saveEntry();
+function renderNotes(){
+  const notes=JSON.parse(localStorage.getItem(`plantifi_notes_${currentUser?.username||'guest'}`)||'[]');
+  document.getElementById('notesList').innerHTML=notes.length===0
+    ?'<p style="color:var(--text-muted);text-align:center;padding:2rem">Нет заметок.</p>'
+    :notes.slice().reverse().map(n=>`<div class="note-card"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p><div class="note-card-footer"><span class="note-date">${fmtDate(n.date)}</span><button class="btn btn-sm btn-danger" onclick="deleteNote('${n.id}')">Удалить</button></div></div>`).join('');
+}
+function addNote(){
+  if(!currentUser){alert('Войдите в аккаунт');return}
+  const t=document.getElementById('noteTitle').value.trim(),x=document.getElementById('noteText').value.trim();
+  if(!t||!x){alert('Заполните заголовок и текст');return}
+  const notes=JSON.parse(localStorage.getItem(`plantifi_notes_${currentUser.username}`)||'[]');
+  notes.push({id:String(Date.now()),title:t,text:x,date:new Date().toISOString()});
+  localStorage.setItem(`plantifi_notes_${currentUser.username}`,JSON.stringify(notes));
+  document.getElementById('noteTitle').value='';document.getElementById('noteText').value='';renderNotes();
+}
+function deleteNote(id){const k=`plantifi_notes_${currentUser?.username||'guest'}`;const n=JSON.parse(localStorage.getItem(k)||'[]');localStorage.setItem(k,JSON.stringify(n.filter(x=>x.id!==id)));renderNotes()}
+
+function renderCalendar(){
+  const y=calendarDate.getFullYear(),m=calendarDate.getMonth();
+  const months=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  document.getElementById('calendarMonth').textContent=`${months[m]} ${y}`;
+  const grid=document.getElementById('calendarGrid');
+  const firstDay=new Date(y,m,1).getDay();const daysInMonth=new Date(y,m+1,0).getDate();const today=new Date();
+  const events=JSON.parse(localStorage.getItem(`plantifi_events_${currentUser?.username||'guest'}`)||'[]');
+  const colors={water:'#42a5f5',fertilize:'#66bb6a',repot:'#ffa726',prune:'#ef5350',harvest:'#ab47bc'};
+  let html=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d=>`<div class="cal-header">${d}</div>`).join('');
+  const sd=firstDay===0?6:firstDay-1;
+  for(let i=0;i<sd;i++)html+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isT=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+    const dayEv=events.filter(e=>e.date===ds);const isSel=selectedCalDate===ds;
+    html+=`<div class="cal-day ${isT?'today':''} ${isSel?'selected':''}" onclick="selectCalDate('${ds}')"><span>${d}</span><div class="cal-day-events">${dayEv.slice(0,3).map(e=>`<div class="cal-day-event" style="background:${colors[e.type]||'#999'}"></div>`).join('')}</div></div>`;
   }
+  grid.innerHTML=html;renderCalendarEvents();
 }
-
-function deleteJournal(id) {
-  const key = `plantifi_journal_${currentUser?.username || 'guest'}`;
-  const entries = JSON.parse(localStorage.getItem(key) || '[]');
-  localStorage.setItem(key, JSON.stringify(entries.filter(e => e.id !== id)));
-  renderJournal();
+function changeMonth(d){calendarDate.setMonth(calendarDate.getMonth()+d);renderCalendar()}
+function selectCalDate(ds){selectedCalDate=ds;document.getElementById('calendarEventForm').style.display='block';document.getElementById('eventDate').textContent=fmtDate(ds);renderCalendar()}
+function updateCalendarForm(){const s=document.getElementById('eventPlant');s.innerHTML='<option value="">Растение...</option>'+PLANTS.map(p=>`<option value="${p.id}">${p.emoji} ${p.name}</option>`).join('')}
+function addCalendarEvent(){
+  if(!currentUser){alert('Войдите в аккаунт');return}
+  const plantId=document.getElementById('eventPlant').value,type=document.getElementById('eventType').value,note=document.getElementById('eventNote').value;
+  if(!selectedCalDate){alert('Выберите дату');return}
+  const events=JSON.parse(localStorage.getItem(`plantifi_events_${currentUser.username}`)||'[]');
+  events.push({id:Date.now(),date:selectedCalDate,plantId:+plantId,type,note});
+  localStorage.setItem(`plantifi_events_${currentUser.username}`,JSON.stringify(events));
+  document.getElementById('eventNote').value='';document.getElementById('calendarEventForm').style.display='none';selectedCalDate=null;renderCalendar();
 }
-
-function setMood(mood, btn) {
-  selectedMood = mood;
-  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function renderCalendarEvents(){
+  const events=JSON.parse(localStorage.getItem(`plantifi_events_${currentUser?.username||'guest'}`)||'[]');
+  const me=events.filter(e=>{const d=new Date(e.date);return d.getMonth()===calendarDate.getMonth()&&d.getFullYear()===calendarDate.getFullYear()}).sort((a,b)=>a.date.localeCompare(b.date));
+  const icons={water:'💧',fertilize:'🧪',repot:'🪴',prune:'✂️',harvest:'🧺'};
+  document.getElementById('calendarEvents').innerHTML=me.length===0?'<p style="color:var(--text-muted);text-align:center">Нет событий в этом месяце</p>':'<h3>События:</h3>'+me.map(e=>`<div class="cal-event"><div class="cal-event-icon">${icons[e.type]||'📌'}</div><div class="cal-event-info"><div class="cal-event-plant">${getPlantEmoji(e.plantId)} ${getPlantName(e.plantId)}</div><div class="cal-event-note">${fmtDate(e.date)}${e.note?' • '+esc(e.note):''}</div></div><button class="btn btn-sm btn-danger" onclick="deleteEvent(${e.id})">✕</button></div>`).join('');
 }
+function deleteEvent(id){const k=`plantifi_events_${currentUser?.username||'guest'}`;const e=JSON.parse(localStorage.getItem(k)||'[]');localStorage.setItem(k,JSON.stringify(e.filter(x=>x.id!==id)));renderCalendar()}
 
-function previewPhoto(event) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = document.getElementById('photoPreview');
-    img.src = e.target.result;
-    img.classList.remove('hidden');
-  };
-  reader.readAsDataURL(event.target.files[0]);
+let communityFilter='all';
+function renderCommunity(){
+  const posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]');
+  const f=communityFilter==='all'?posts:posts.filter(p=>p.category===communityFilter);
+  const catC={tip:'#66bb6a',question:'#42a5f5',success:'#ffd54f',problem:'#ef5350'};
+  const catL={tip:'💡 Совет',question:'❓ Вопрос',success:'🎉 Успех',problem:'⚠️ Проблема'};
+  document.getElementById('communityFeed').innerHTML=f.length===0
+    ?'<p style="color:var(--text-muted);text-align:center;padding:2rem">Нет постов.</p>'
+    :f.slice().reverse().map(p=>`<div class="post-card"><div class="post-header"><span class="post-author">👤 ${esc(p.author)}</span><span class="post-category-badge" style="background:${catC[p.category]||'#666'};color:white">${catL[p.category]||p.category}</span></div><div class="post-text">${esc(p.text)}</div><div class="post-footer"><span class="post-date">${fmtDate(p.date)}</span><div class="post-actions"><button class="post-action" onclick="likePost(${p.id})">👍 ${p.likes||0}</button></div></div></div>`).join('');
 }
-
-/* ─── NOTES ─── */
-function renderNotes() {
-  const notes = JSON.parse(localStorage.getItem(`plantifi_notes_${currentUser?.username || 'guest'}`) || '[]');
-  const container = document.getElementById('notesList');
-  container.innerHTML = notes.length === 0
-    ? '<p style="color:var(--text-muted);text-align:center;padding:2rem;">Нет заметок.</p>'
-    : notes.reverse().map(n => `
-      <div class="note-card">
-        <h3>${escapeHtml(n.title)}</h3>
-        <p>${escapeHtml(n.text)}</p>
-        <div class="note-card-footer">
-          <span class="note-date">${formatDate(n.date)}</span>
-          ${n.proposed ? '<span class="note-badge proposed">Предложено публично</span>' : ''}
-          <div>
-            <button class="btn btn-sm btn-danger" onclick="deleteNote('${n.id}')">Удалить</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
+function addCommunityPost(){
+  if(!currentUser){alert('Войдите в аккаунт');return}
+  const text=document.getElementById('communityPost').value.trim(),category=document.getElementById('postCategory').value;
+  if(!text){alert('Введите текст поста');return}
+  const posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]');
+  posts.push({id:Date.now(),author:currentUser.username,text,category,likes:0,date:new Date().toISOString()});
+  localStorage.setItem('plantifi_community',JSON.stringify(posts));
+  document.getElementById('communityPost').value='';renderCommunity();
 }
+function likePost(id){const p=JSON.parse(localStorage.getItem('plantifi_community')||'[]');const x=p.find(y=>y.id===id);if(x){x.likes=(x.likes||0)+1;localStorage.setItem('plantifi_community',JSON.stringify(p));renderCommunity()}}
+function filterPosts(cat,btn){communityFilter=cat;btn.parentElement.querySelectorAll('.filter-tag').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderCommunity()}
 
-function addNote() {
-  if (!currentUser) { alert('Войдите в аккаунт'); return; }
-  const title = document.getElementById('noteTitle').value.trim();
-  const text = document.getElementById('noteText').value.trim();
-  const proposed = document.getElementById('notePublic').checked;
-  if (!title || !text) { alert('Заполните заголовок и текст'); return; }
-
-  const notes = JSON.parse(localStorage.getItem(`plantifi_notes_${currentUser.username}`) || '[]');
-  notes.push({ id: String(Date.now()), title, text, proposed, date: new Date().toISOString() });
-  localStorage.setItem(`plantifi_notes_${currentUser.username}`, JSON.stringify(notes));
-
-  if (proposed) {
-    const proposals = JSON.parse(localStorage.getItem('plantifi_proposals') || '[]');
-    proposals.push({
-      id: Date.now(),
-      plantId: null,
-      field: 'community_note',
-      text: `📝 ${title}\n\n${text}`,
-      author: currentUser.username,
-      status: 'pending',
-      date: new Date().toISOString()
-    });
-    localStorage.setItem('plantifi_proposals', JSON.stringify(proposals));
-    renderProposals();
-  }
-
-  document.getElementById('noteTitle').value = '';
-  document.getElementById('noteText').value = '';
-  document.getElementById('notePublic').checked = false;
-  renderNotes();
-}
-
-function deleteNote(id) {
-  const key = `plantifi_notes_${currentUser?.username || 'guest'}`;
-  const notes = JSON.parse(localStorage.getItem(key) || '[]');
-  localStorage.setItem(key, JSON.stringify(notes.filter(n => n.id !== id)));
-  renderNotes();
-}
-
-/* ─── PROPOSALS ─── */
-function renderProposals() {
-  const proposals = JSON.parse(localStorage.getItem('plantifi_proposals') || '[]');
-  const container = document.getElementById('proposalsList');
-
-  container.innerHTML = proposals.length === 0
-    ? '<p style="color:var(--text-muted);text-align:center;padding:2rem;">Пока нет предложений.</p>'
-    : proposals.reverse().map(p => `
-      <div class="proposal-card">
-        <div class="proposal-header">
-          <div>
-            <span class="proposal-author">👤 ${escapeHtml(p.author)} • ${formatDate(p.date)}</span>
-          </div>
-          <span class="proposal-status ${p.status}">${statusText(p.status)}</span>
-        </div>
-        <div class="proposal-body">
-          <div class="proposal-field">🌱 ${p.plantId ? getPlantName(p.plantId) : 'Общее'} • 📝 Поле: ${fieldName(p.field)}</div>
-          <div class="proposal-text">${escapeHtml(p.text)}</div>
-        </div>
-        ${adminUnlocked && p.status === 'pending' ? `
-          <div class="proposal-actions">
-            <button class="btn btn-sm btn-primary" onclick="approveProposal(${p.id})">✅ Одобрить</button>
-            <button class="btn btn-sm btn-danger" onclick="rejectProposal(${p.id})">❌ Отклонить</button>
-          </div>
-        ` : ''}
-      </div>
-    `).join('');
-}
-
-function toggleAdmin() {
-  const show = document.getElementById('adminMode').checked;
-  document.getElementById('adminPassword').classList.toggle('hidden', !show);
-  document.getElementById('adminUnlock').classList.toggle('hidden', !show);
-  if (!show) {
-    adminUnlocked = false;
-    renderProposals();
-  }
-}
-
-function unlockAdmin() {
-  const pw = document.getElementById('adminPassword').value;
-  if (pw === ADMIN_PASSWORD) {
-    adminUnlocked = true;
-    renderProposals();
-    alert('Режим владельца активирован!');
-  } else {
-    alert('Неверный пароль');
-  }
-}
-
-function approveProposal(id) {
-  const proposals = JSON.parse(localStorage.getItem('plantifi_proposals') || '[]');
-  const p = proposals.find(x => x.id === id);
-  if (p) {
-    p.status = 'approved';
-    localStorage.setItem('plantifi_proposals', JSON.stringify(proposals));
-    alert('Предложение одобрено!');
-    renderProposals();
-  }
-}
-
-function rejectProposal(id) {
-  const proposals = JSON.parse(localStorage.getItem('plantifi_proposals') || '[]');
-  const p = proposals.find(x => x.id === id);
-  if (p) {
-    p.status = 'rejected';
-    localStorage.setItem('plantifi_proposals', JSON.stringify(proposals));
-    alert('Предложение отклонено.');
-    renderProposals();
-  }
-}
-
-/* ─── CALENDAR ─── */
-function renderCalendar() {
-  const year = calendarDate.getFullYear();
-  const month = calendarDate.getMonth();
-  const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-  document.getElementById('calendarMonth').textContent = `${months[month]} ${year}`;
-
-  const grid = document.getElementById('calendarGrid');
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = new Date();
-  const events = JSON.parse(localStorage.getItem(`plantifi_events_${currentUser?.username || 'guest'}`) || '[]');
-  const eventColors = { water: '#42a5f5', fertilize: '#66bb6a', repot: '#ffa726', prune: '#ef5350', harvest: '#ab47bc' };
-
-  let html = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d => `<div class="cal-header">${d}</div>`).join('');
-
-  const startDay = firstDay === 0 ? 6 : firstDay - 1;
-  for (let i = 0; i < startDay; i++) html += '<div class="cal-day empty"></div>';
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-    const dayEvents = events.filter(e => e.date === dateStr);
-    const isSelected = selectedCalDate === dateStr;
-
-    html += `
-      <div class="cal-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}" onclick="selectCalDate('${dateStr}')">
-        <span>${d}</span>
-        <div class="cal-day-events">
-          ${dayEvents.slice(0,3).map(e => `<div class="cal-day-event" style="background:${eventColors[e.type] || '#999'}"></div>`).join('')}
-        </div>
-      </div>`;
-  }
-
-  grid.innerHTML = html;
-  renderCalendarEvents();
-}
-
-function changeMonth(delta) {
-  calendarDate.setMonth(calendarDate.getMonth() + delta);
-  renderCalendar();
-}
-
-function selectCalDate(dateStr) {
-  selectedCalDate = dateStr;
-  document.getElementById('calendarEventForm').style.display = 'block';
-  document.getElementById('eventDate').textContent = formatDate(dateStr);
-  renderCalendar();
-}
-
-function updateCalendarForm() {
-  const select = document.getElementById('eventPlant');
-  select.innerHTML = '<option value="">Растение...</option>' +
-    PLANTS.map(p => `<option value="${p.id}">${p.emoji} ${p.name}</option>`).join('');
-}
-
-function addCalendarEvent() {
-  if (!currentUser) { alert('Войдите в аккаунт'); return; }
-  const plantId = document.getElementById('eventPlant').value;
-  const type = document.getElementById('eventType').value;
-  const note = document.getElementById('eventNote').value;
-  if (!selectedCalDate) { alert('Выберите дату'); return; }
-
-  const events = JSON.parse(localStorage.getItem(`plantifi_events_${currentUser.username}`) || '[]');
-  events.push({ id: Date.now(), date: selectedCalDate, plantId: parseInt(plantId), type, note });
-  localStorage.setItem(`plantifi_events_${currentUser.username}`, JSON.stringify(events));
-
-  document.getElementById('eventNote').value = '';
-  document.getElementById('calendarEventForm').style.display = 'none';
-  selectedCalDate = null;
-  renderCalendar();
-}
-
-function renderCalendarEvents() {
-  const events = JSON.parse(localStorage.getItem(`plantifi_events_${currentUser?.username || 'guest'}`) || '[]');
-  const monthEvents = events.filter(e => {
-    const d = new Date(e.date);
-    return d.getMonth() === calendarDate.getMonth() && d.getFullYear() === calendarDate.getFullYear();
-  }).sort((a, b) => a.date.localeCompare(b.date));
-
-  const typeIcons = { water: '💧', fertilize: '🧪', repot: '🪴', prune: '✂️', harvest: '🧺' };
-  const container = document.getElementById('calendarEvents');
-  container.innerHTML = monthEvents.length === 0
-    ? '<p style="color:var(--text-muted);text-align:center;">Нет событий в этом месяце</p>'
-    : `<h3>События:</h3>` + monthEvents.map(e => `
-      <div class="cal-event">
-        <div class="cal-event-icon">${typeIcons[e.type] || '📌'}</div>
-        <div class="cal-event-info">
-          <div class="cal-event-plant">${getPlantEmoji(e.plantId)} ${getPlantName(e.plantId)}</div>
-          <div class="cal-event-note">${formatDate(e.date)}${e.note ? ' • ' + escapeHtml(e.note) : ''}</div>
-        </div>
-        <button class="btn btn-sm btn-danger" onclick="deleteEvent(${e.id})">✕</button>
-      </div>
-    `).join('');
-}
-
-function deleteEvent(id) {
-  const key = `plantifi_events_${currentUser?.username || 'guest'}`;
-  const events = JSON.parse(localStorage.getItem(key) || '[]');
-  localStorage.setItem(key, JSON.stringify(events.filter(e => e.id !== id)));
-  renderCalendar();
-}
-
-/* ─── COMMUNITY ─── */
-let communityFilter = 'all';
-
-function renderCommunity() {
-  const posts = JSON.parse(localStorage.getItem('plantifi_community') || '[]');
-  const filtered = communityFilter === 'all' ? posts : posts.filter(p => p.category === communityFilter);
-  const catColors = { tip: '#66bb6a', question: '#42a5f5', photo: '#ab47bc', success: '#ffd54f', problem: '#ef5350' };
-  const catLabels = { tip: '💡 Совет', question: '❓ Вопрос', photo: '📸 Фото', success: '🎉 Успех', problem: '⚠️ Проблема' };
-
-  const container = document.getElementById('communityFeed');
-  container.innerHTML = filtered.length === 0
-    ? '<p style="color:var(--text-muted);text-align:center;padding:2rem;">Нет постов.</p>'
-    : filtered.reverse().map(p => `
-      <div class="post-card">
-        <div class="post-header">
-          <span class="post-author">👤 ${escapeHtml(p.author)}</span>
-          <span class="post-category-badge" style="background:${catColors[p.category] || '#666'};color:white">${catLabels[p.category] || p.category}</span>
-        </div>
-        <div class="post-text">${escapeHtml(p.text)}</div>
-        <div class="post-footer">
-          <span class="post-date">${formatDate(p.date)}</span>
-          <div class="post-actions">
-            <button class="post-action" onclick="likePost(${p.id})">👍 ${p.likes || 0}</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-}
-
-function addCommunityPost() {
-  if (!currentUser) { alert('Войдите в аккаунт'); return; }
-  const text = document.getElementById('communityPost').value.trim();
-  const category = document.getElementById('postCategory').value;
-  if (!text) { alert('Введите текст поста'); return; }
-
-  const posts = JSON.parse(localStorage.getItem('plantifi_community') || '[]');
-  posts.push({
-    id: Date.now(),
-    author: currentUser.username,
-    text,
-    category,
-    likes: 0,
-    date: new Date().toISOString()
-  });
-  localStorage.setItem('plantifi_community', JSON.stringify(posts));
-  document.getElementById('communityPost').value = '';
-  renderCommunity();
-}
-
-function likePost(id) {
-  const posts = JSON.parse(localStorage.getItem('plantifi_community') || '[]');
-  const p = posts.find(x => x.id === id);
-  if (p) {
-    p.likes = (p.likes || 0) + 1;
-    localStorage.setItem('plantifi_community', JSON.stringify(posts));
-    renderCommunity();
-  }
-}
-
-function filterPosts(cat, btn) {
-  communityFilter = cat;
-  btn.parentElement.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  renderCommunity();
-}
-
-/* ─── HELPERS ─── */
-function getPlantName(id) {
-  const p = PLANTS.find(x => x.id === id);
-  return p ? p.name : 'Неизвестное';
-}
-
-function getPlantEmoji(id) {
-  const p = PLANTS.find(x => x.id === id);
-  return p ? p.emoji : '🌿';
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function statusText(s) {
-  return { pending: '⏳ Ожидает', approved: '✅ Одобрено', rejected: '❌ Отклонено' }[s] || s;
-}
-
-function fieldName(f) {
-  const names = {
-    description: 'Описание', watering: 'Полив', light: 'Освещение', soil: 'Грунт',
-    temperature: 'Температура', fertilizer: 'Удобрения', diseases: 'Болезни', tips: 'Советы',
-    community_note: 'Публичная заметка'
-  };
-  return names[f] || f;
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
+function getPlantName(id){const p=PLANTS.find(x=>x.id===id);return p?p.name:'Неизвестное'}
+function getPlantEmoji(id){const p=PLANTS.find(x=>x.id===id);return p?p.emoji:'🌿'}
+function fmtDate(ds){if(!ds)return'';return new Date(ds).toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'})}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 </script>
 </body>
 </html>
