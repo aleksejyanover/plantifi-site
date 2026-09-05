@@ -727,6 +727,35 @@ function waterPlant(plantId){
 }
 
 /* ─── COMPARE ─── */
+function careScore(p){
+  var total=0;
+  total+=(4-(p.difficulty||2))*3;
+  var w=String(p.care.watering||'').toLowerCase();
+  var m=w.match(/раз в (\d+)(?:-(\d+))?\s*(день|дня|дней|неделю|недели|недель|месяц|месяца|месяцев)/);
+  if(m){
+    var a=+m[1],b=m[2]?+m[2]:a,u=m[3];
+    var days=u.indexOf('месяц')===0?((a+b)/2)*30:u.indexOf('недел')===0?((a+b)/2)*7:(a+b)/2;
+    total+=Math.max(0,Math.min(10,days));
+  }else if(/ежедневно|каждый день/.test(w)){
+    total+=2;
+  }else{
+    var f=w.match(/(\d+)(?:-(\d+))?\s*раз/);
+    if(f){
+      var per=(+f[1]+(f[2]?+f[2]:+f[1]))/2;
+      total+=/неделю/.test(w)?Math.max(0,10-per*3):Math.max(0,10-per);
+    }else total+=5;
+  }
+  var ts=String(p.care.temperature||'');
+  var nums=ts.match(/-?\d+/g);
+  if(nums&&nums.length>=2){
+    var mn=Math.min.apply(null,nums.map(Number)),mx=Math.max.apply(null,nums.map(Number));
+    total+=Math.max(0,Math.min(5,(mx-mn)/2));
+    if(mn<=10)total+=2;
+  }
+  var L=String(p.care.light||'').toLowerCase();
+  if(/полутень|теневынослив|тень/.test(L))total+=2;
+  return Math.round(total);
+}
 function renderCompare(){
   var a=document.getElementById('compareA'),b=document.getElementById('compareB');
   a.innerHTML=PLANTS.map(function(p){return '<option value="'+p.id+'">'+p.emoji+' '+p.name+'</option>'}).join('');
@@ -757,7 +786,14 @@ function comparePlants(){
   function cell(txt,extra){
     return '<td class="'+(extra||'')+'">'+esc(txt)+'</td>';
   }
-  document.getElementById('compareResult').innerHTML='<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440</th><th>'+A.emoji+' '+esc(A.name)+'</th><th>'+B.emoji+' '+esc(B.name)+'</th></tr></thead><tbody>'+rows().map(function(r){
+  var sa=careScore(A),sb=careScore(B);
+  var verdict;
+  if(sa===sb)verdict='<div class="compare-verdict tie"><span class="v-emoji">🤝</span><div><div class="v-title">Ничья! Оба хороши</div><div class="v-sub">По шкале простоты ухода оба набрали '+sa+' баллов</div></div></div>';
+  else{
+    var win=sa>sb?A:B,lo=sa>sb?B:A;
+    verdict='<div class="compare-verdict '+(sa>sb?'awin':'bwin')+'"><span class="v-emoji">'+(sa>sb?'🏆':'🏆')+'</span><div><div class="v-title">Победил: '+win.emoji+' '+esc(win.name)+'</div><div class="v-sub">'+win.emoji+' набрал '+Math.max(sa,sb)+' балл(а) против '+lo.emoji+' — '+Math.min(sa,sb)+' • проще в уходе</div></div></div>';
+  }
+  document.getElementById('compareResult').innerHTML=verdict+'<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440</th><th>'+A.emoji+' '+esc(A.name)+'</th><th>'+B.emoji+' '+esc(B.name)+'</th></tr></thead><tbody>'+rows().map(function(r){
     return '<tr><td>'+r[0]+'</td>'+cell(r[1])+cell(r[2])+'</tr>';
   }).join('')+'</tbody></table></div>';
   document.getElementById('compareResult').scrollIntoView({behavior:'smooth'});
