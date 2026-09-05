@@ -58,18 +58,18 @@ var S_WHO=_sec([1082,1090,1086,1080,1075,1088,1072,1077,1090]);
 var S_REPORT=_sec([1086,1090,1095,1077,1090]);
 function _norm(s){return s.toLowerCase().replace(/[^\u0400-\u04ffa-z0-9]/g,'')}
 function secretReport(){
-  var users=JSON.parse(localStorage.getItem('plantifi_users')||'[]');
+  var users=safeParse(localStorage.getItem('plantifi_users'),[]);
   var names=users.map(function(u){return u.username});
   var gardenCount=0,waterSum=0,chatSum=0,journalSum=0,achMax=0;
   names.forEach(function(n){
-    gardenCount+=JSON.parse(localStorage.getItem('plantifi_garden_'+n)||'[]').length;
-    waterSum+=parseInt((JSON.parse(localStorage.getItem('plantifi_stats_'+n)||'{}')['waters']||0));
-    chatSum+=parseInt((JSON.parse(localStorage.getItem('plantifi_stats_'+n)||'{}')['chats']||0));
-    journalSum+=JSON.parse(localStorage.getItem('plantifi_journal_'+n)||'[]').length;
-    var ac=(JSON.parse(localStorage.getItem('plantifi_ach_'+n)||'[]')).length;
+    gardenCount+=safeParse(localStorage.getItem('plantifi_garden_'+n),[]).length;
+    waterSum+=parseInt((safeParse(localStorage.getItem('plantifi_stats_'+n),{})['waters']||0));
+    chatSum+=parseInt((safeParse(localStorage.getItem('plantifi_stats_'+n),{})['chats']||0));
+    journalSum+=safeParse(localStorage.getItem('plantifi_journal_'+n),[]).length;
+    var ac=safeParse(localStorage.getItem('plantifi_ach_'+n),[]).length;
     if(ac>achMax)achMax=ac;
   });
-  var posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]').length;
+  var posts=safeParse(localStorage.getItem('plantifi_community'),[]).length;
   return 'Ты говоришь со мной, а я вижу всех. Игроков в саду: '+names.length+'.<br>🌿 Растений у игроков: '+gardenCount+'<br>💧 Поливов отмечено: '+waterSum+'<br>💬 Сообщений растению послано: '+chatSum+'<br>📓 Записей в журналах: '+journalSum+'<br>📢 Постов в сообществе: '+posts+'<br>🏆 Лучший игрок открыл '+achMax+' наград.<br>Я слежу за каждым ростком. Не проболтайся, где взял код... 🌲';
 }
 
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded',function(){
     document.documentElement.setAttribute('data-theme',saved);
     document.querySelector('.theme-btn').textContent=saved==='light'?'\u2600\ufe0f':'\ud83c\udf19';
   }
-  currentUser=JSON.parse(localStorage.getItem('plantifi_user'));
+  currentUser=safeParse(localStorage.getItem('plantifi_user'),null);
   updateUI();
   renderCatalog();
   renderJournal();
@@ -192,7 +192,7 @@ function openLogin(){showLogin();document.getElementById('authModal').classList.
 function register(){
   var u=document.getElementById('regUsername').value.trim(),p=document.getElementById('regPassword').value;
   if(!u||!p){alert('\u0417\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u0435 \u0432\u0441\u0435 \u043f\u043e\u043b\u044f');return}
-  var users=JSON.parse(localStorage.getItem('plantifi_users')||'{}');
+  var users=safeParse(localStorage.getItem('plantifi_users'),{});
   if(users[u]){alert('\u0423\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442');return}
   users[u]={password:p,email:document.getElementById('regEmail').value};
   localStorage.setItem('plantifi_users',JSON.stringify(users));
@@ -203,7 +203,7 @@ function register(){
 }
 function login(){
   var u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value;
-  var users=JSON.parse(localStorage.getItem('plantifi_users')||'{}');
+  var users=safeParse(localStorage.getItem('plantifi_users'),{});
   if(users[u]&&users[u].password===p){
     currentUser={username:u};
     localStorage.setItem('plantifi_user',JSON.stringify(currentUser));
@@ -332,10 +332,11 @@ function sendChat(){
   box.innerHTML+='<div class="chat-msg plant" id="typing"><div class="chat-avatar">'+p.emoji+'</div><div class="chat-bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>';
   box.scrollTop=box.scrollHeight;
   setTimeout(function(){
-    recordChatPlant(chatPlant);
-    var reply=plantReply(chatPlant,msg);
+    try{recordChatPlant(chatPlant)}catch(e){}
+    var reply;
+    try{reply=plantReply(chatPlant,msg)}catch(e){reply='\ud83c\udf31 Что-то пошло не так... но я рядом. Спроси меня ещё!'}
     var typing=document.getElementById('typing');
-    if(typing)typing.remove();
+    if(typing&&typing.remove)typing.remove();
     box.innerHTML+='<div class="chat-msg plant"><div class="chat-avatar">'+p.emoji+'</div><div class="chat-bubble">'+reply+'</div></div>';
     box.scrollTop=box.scrollHeight;
   },700+Math.random()*1000);
@@ -399,7 +400,7 @@ function updateJournalSelect(){
 }
 function renderJournal(){
   updateJournalSelect();
-  var entries=JSON.parse(localStorage.getItem('plantifi_journal_'+(currentUser?currentUser.username:'guest'))||'[]');
+  var entries=safeParse(localStorage.getItem('plantifi_journal_'+(currentUser?currentUser.username:'guest')),[]);
   if(entries.length===0){
     document.getElementById('journalEntries').innerHTML='<p style="color:var(--text-muted);text-align:center;padding:2rem">\u041d\u0435\u0442 \u0437\u0430\u043f\u0438\u0441\u0435\u0439.</p>';
     return;
@@ -417,7 +418,7 @@ function addJournalEntry(){
   if(!plantId||!text){alert('\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u0435 \u0438 \u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435');return}
   var photoInput=document.getElementById('journalPhoto');
   var save=function(photo){
-    var entries=JSON.parse(localStorage.getItem('plantifi_journal_'+currentUser.username)||'[]');
+    var entries=safeParse(localStorage.getItem('plantifi_journal_'+currentUser.username),[]);
     entries.push({id:String(Date.now()),plantId:+plantId,date:date,text:text,mood:selectedMood,photo:photo||null});
     localStorage.setItem('plantifi_journal_'+currentUser.username,JSON.stringify(entries));
     document.getElementById('journalText').value='';
@@ -433,7 +434,7 @@ function addJournalEntry(){
 }
 function deleteJournal(id){
   var k='plantifi_journal_'+(currentUser?currentUser.username:'guest');
-  var e=JSON.parse(localStorage.getItem(k)||'[]');
+  var e=safeParse(localStorage.getItem(k),[]);
   localStorage.setItem(k,JSON.stringify(e.filter(function(x){return x.id!==id})));
   renderJournal();
 }
@@ -450,7 +451,7 @@ function previewPhoto(ev){
 
 /* ─── NOTES ─── */
 function renderNotes(){
-  var notes=JSON.parse(localStorage.getItem('plantifi_notes_'+(currentUser?currentUser.username:'guest'))||'[]');
+  var notes=safeParse(localStorage.getItem('plantifi_notes_'+(currentUser?currentUser.username:'guest')),[]);
   if(notes.length===0){
     document.getElementById('notesList').innerHTML='<p style="color:var(--text-muted);text-align:center;padding:2rem">\u041d\u0435\u0442 \u0437\u0430\u043c\u0435\u0442\u043e\u043a.</p>';
     return;
@@ -463,7 +464,7 @@ function addNote(){
   if(!currentUser){alert('\u0412\u043e\u0439\u0434\u0438\u0442\u0435 \u0432 \u0430\u043a\u043a\u0430\u0443\u043d\u0442');return}
   var t=document.getElementById('noteTitle').value.trim(),x=document.getElementById('noteText').value.trim();
   if(!t||!x){alert('\u0417\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u0435 \u0432\u0441\u0451');return}
-  var notes=JSON.parse(localStorage.getItem('plantifi_notes_'+currentUser.username)||'[]');
+  var notes=safeParse(localStorage.getItem('plantifi_notes_'+currentUser.username),[]);
   notes.push({id:String(Date.now()),title:t,text:x,date:new Date().toISOString()});
   localStorage.setItem('plantifi_notes_'+currentUser.username,JSON.stringify(notes));
   document.getElementById('noteTitle').value='';
@@ -473,7 +474,7 @@ function addNote(){
 }
 function deleteNote(id){
   var k='plantifi_notes_'+(currentUser?currentUser.username:'guest');
-  var n=JSON.parse(localStorage.getItem(k)||'[]');
+  var n=safeParse(localStorage.getItem(k),[]);
   localStorage.setItem(k,JSON.stringify(n.filter(function(x){return x.id!==id})));
   renderNotes();
 }
@@ -487,7 +488,7 @@ function renderCalendar(){
   var fd=new Date(y,m,1).getDay();
   var dim=new Date(y,m+1,0).getDate();
   var today=new Date();
-  var events=JSON.parse(localStorage.getItem('plantifi_events_'+(currentUser?currentUser.username:'guest'))||'[]');
+  var events=safeParse(localStorage.getItem('plantifi_events_'+(currentUser?currentUser.username:'guest')),[]);
   var colors={water:'#42a5f5',fertilize:'#66bb6a',repot:'#ffa726',prune:'#ef5350',harvest:'#ab47bc'};
   var html=['\u041f\u043d','\u0412\u0442','\u0421\u0440','\u0427\u0442','\u041f\u0442','\u0421\u0431','\u0412\u0441'].map(function(d){return '<div class="cal-header">'+d+'</div>'}).join('');
   var sd=fd===0?6:fd-1;
@@ -517,7 +518,7 @@ function addCalendarEvent(){
   if(!currentUser){alert('\u0412\u043e\u0439\u0434\u0438\u0442\u0435 \u0432 \u0430\u043a\u043a\u0430\u0443\u043d\u0442');return}
   var plantId=document.getElementById('eventPlant').value,type=document.getElementById('eventType').value,note=document.getElementById('eventNote').value;
   if(!selectedCalDate){alert('\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0434\u0430\u0442\u0443');return}
-  var events=JSON.parse(localStorage.getItem('plantifi_events_'+currentUser.username)||'[]');
+  var events=safeParse(localStorage.getItem('plantifi_events_'+currentUser.username),[]);
   events.push({id:Date.now(),date:selectedCalDate,plantId:+plantId,type:type,note:note});
   localStorage.setItem('plantifi_events_'+currentUser.username,JSON.stringify(events));
   document.getElementById('eventNote').value='';
@@ -527,7 +528,7 @@ function addCalendarEvent(){
   renderCalendar();
 }
 function renderCalendarEvents(){
-  var events=JSON.parse(localStorage.getItem('plantifi_events_'+(currentUser?currentUser.username:'guest'))||'[]');
+  var events=safeParse(localStorage.getItem('plantifi_events_'+(currentUser?currentUser.username:'guest')),[]);
   var me=events.filter(function(e){
     var d=new Date(e.date);
     return d.getMonth()===calendarDate.getMonth()&&d.getFullYear()===calendarDate.getFullYear();
@@ -543,7 +544,7 @@ function renderCalendarEvents(){
 }
 function deleteEvent(id){
   var k='plantifi_events_'+(currentUser?currentUser.username:'guest');
-  var e=JSON.parse(localStorage.getItem(k)||'[]');
+  var e=safeParse(localStorage.getItem(k),[]);
   localStorage.setItem(k,JSON.stringify(e.filter(function(x){return x.id!==id})));
   renderCalendar();
 }
@@ -551,7 +552,7 @@ function deleteEvent(id){
 /* ─── COMMUNITY ─── */
 var communityFilter='all';
 function renderCommunity(){
-  var posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]');
+  var posts=safeParse(localStorage.getItem('plantifi_community'),[]);
   var f=communityFilter==='all'?posts:posts.filter(function(p){return p.category===communityFilter});
   var catC={tip:'#66bb6a',question:'#42a5f5',success:'#ffd54f',problem:'#ef5350'};
   var catL={tip:'\ud83d\udca1 \u0421\u043e\u0432\u0435\u0442',question:'\u2753 \u0412\u043e\u043f\u0440\u043e\u0441',success:'\ud83c\udf89 \u0423\u0441\u043f\u0435\u0445',problem:'\u26a0\ufe0f \u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430'};
@@ -567,7 +568,7 @@ function addCommunityPost(){
   if(!currentUser){alert('\u0412\u043e\u0439\u0434\u0438\u0442\u0435 \u0432 \u0430\u043a\u043a\u0430\u0443\u043d\u0442');return}
   var text=document.getElementById('communityPost').value.trim(),category=document.getElementById('postCategory').value;
   if(!text){alert('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043a\u0441\u0442');return}
-  var posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]');
+  var posts=safeParse(localStorage.getItem('plantifi_community'),[]);
   posts.push({id:Date.now(),author:currentUser.username,text:text,category:category,likes:0,date:new Date().toISOString()});
   localStorage.setItem('plantifi_community',JSON.stringify(posts));
   document.getElementById('communityPost').value='';
@@ -575,7 +576,7 @@ function addCommunityPost(){
   renderCommunity();
 }
 function likePost(id){
-  var p=JSON.parse(localStorage.getItem('plantifi_community')||'[]');
+  var p=safeParse(localStorage.getItem('plantifi_community'),[]);
   var x=p.find(function(y){return y.id===id});
   if(x){x.likes=(x.likes||0)+1;localStorage.setItem('plantifi_community',JSON.stringify(p));checkAchievements();renderCommunity()}
 }
@@ -593,9 +594,10 @@ function fmtDate(ds){if(!ds)return'';return new Date(ds).toLocaleDateString('ru-
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
 /* ─── STATS & ACHIEVEMENTS ─── */
-function getStats(){return JSON.parse(localStorage.getItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'))||'{}')}
+function safeParse(raw,def){try{var v=raw?JSON.parse(raw):def;return v===null||v===undefined?def:v}catch(e){return def}}
+function getStats(){return safeParse(localStorage.getItem('plantifi_stats_'+(currentUser?currentUser.username:'guest')),{})}
 function track(key,val){var s=getStats();s[key]=(s[key]||0)+(val||1);localStorage.setItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'),JSON.stringify(s));checkAchievements()}
-function recordChatPlant(pid){var user=currentUser?currentUser.username:'guest';var chats=JSON.parse(localStorage.getItem('plantifi_chats_'+user)||'[]');if(chats.indexOf(pid)===-1)chats.push(pid);localStorage.setItem('plantifi_chats_'+user,JSON.stringify(chats));track('chats')}
+function recordChatPlant(pid){var user=currentUser?currentUser.username:'guest';var chats=safeParse(localStorage.getItem('plantifi_chats_'+user),[]);if(chats.indexOf(pid)===-1)chats.push(pid);localStorage.setItem('plantifi_chats_'+user,JSON.stringify(chats));try{track('chats')}catch(e){}}
 var ACHIEVEMENTS=[
   {id:'visit',emoji:'\ud83c\udf31',title:'Первый шаг',desc:'Посетить PlantiFi',check:function(c){return true}},
   {id:'profile',emoji:'\ud83d\udc64',title:'Садовод',desc:'Создать аккаунт',check:function(c){return c.logged}},
@@ -618,13 +620,13 @@ var ACHIEVEMENTS=[
 ];
 function achievementContext(){
   var user=currentUser?currentUser.username:'guest';
-  var garden=JSON.parse(localStorage.getItem('plantifi_garden_'+user)||'[]');
-  var journal=JSON.parse(localStorage.getItem('plantifi_journal_'+user)||'[]');
-  var notes=JSON.parse(localStorage.getItem('plantifi_notes_'+user)||'[]');
-  var events=JSON.parse(localStorage.getItem('plantifi_events_'+user)||'[]');
-  var posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]').filter(function(p){return p.author===user});
+  var garden=safeParse(localStorage.getItem('plantifi_garden_'+user),[]);
+  var journal=safeParse(localStorage.getItem('plantifi_journal_'+user),[]);
+  var notes=safeParse(localStorage.getItem('plantifi_notes_'+user),[]);
+  var events=safeParse(localStorage.getItem('plantifi_events_'+user),[]);
+  var posts=safeParse(localStorage.getItem('plantifi_community'),[]).filter(function(p){return p.author===user});
   var likesReceived=posts.reduce(function(s,p){return s+(p.likes||0)},0);
-  var chats=JSON.parse(localStorage.getItem('plantifi_chats_'+user)||'[]');
+  var chats=safeParse(localStorage.getItem('plantifi_chats_'+user),[]);
   return {logged:!!currentUser,stats:getStats(),garden:garden,journal:journal,notes:notes,events:events,posts:posts,likesReceived:likesReceived,chats:chats};
 }
 function checkAchievements(){
@@ -663,7 +665,7 @@ function renderStats(){
 
 /* ─── MY GARDEN ─── */
 function gardenKey(){return 'plantifi_garden_'+(currentUser?currentUser.username:'guest')}
-function getGarden(){return JSON.parse(localStorage.getItem(gardenKey())||'[]')}
+function getGarden(){return safeParse(localStorage.getItem(gardenKey()),[])}
 function gardenInterval(plantId){
   var p=PLANTS.find(function(x){return x.id===plantId});
   return p?(p.difficulty===1?2:p.difficulty===2?4:7):4;
