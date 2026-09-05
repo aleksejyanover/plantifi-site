@@ -22,6 +22,8 @@ body::after{content:'🌿';position:fixed;left:-6vw;bottom:-12vh;font-size:34rem
 .nav-right{display:flex;align-items:center;gap:.8rem}
 .btn-auth{padding:.4rem 1rem;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none;border-radius:var(--radius-sm);cursor:pointer;font-size:.85rem;box-shadow:0 4px 12px var(--glow)}
 .btn-auth:hover{filter:brightness(1.1)}
+.xp-badge{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .8rem;font-size:.78rem;font-weight:700;border-radius:999px;background:linear-gradient(135deg,var(--surface2),var(--surface));border:1px solid var(--primary);color:var(--primary-light);white-space:nowrap;box-shadow:0 2px 10px var(--glow);cursor:default;transition:all .2s}
+.xp-badge:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(--glow)}
 .theme-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer}
 .container{max-width:1400px;margin:0 auto;padding:1rem 2rem 4rem;position:relative;z-index:1}
@@ -301,6 +303,7 @@ select.input-field option{background:var(--bg2);color:var(--text)}
     <a onclick="showSection('achievements')" class="nav-link" data-section="achievements">🏆 Достижения</a>
   </div>
   <div class="nav-right">
+    <span id="xpBadge" class="xp-badge" title="Твой уровень садовода">🌱 Росток · 0</span>
     <button class="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
     <span id="userGreeting"></span>
     <button onclick="toggleAuth()" class="btn-auth" id="authBtn">Войти</button>
@@ -1353,6 +1356,7 @@ function updateUI(){
   document.getElementById('userGreeting').textContent=currentUser?'\ud83d\udc64 '+currentUser.username:'';
   document.getElementById('authBtn').textContent=currentUser?'\u0412\u044b\u0439\u0442\u0438':'\u0412\u043e\u0439\u0442\u0438';
   updateCalendarForm();
+  renderXpBadge();
 }
 
 /* ─── NAV ─── */
@@ -1738,7 +1742,7 @@ function esc(s){var d=document.createElement('div');d.textContent=s;return d.inn
 /* ─── STATS & ACHIEVEMENTS ─── */
 function safeParse(raw,def){try{var v=raw?JSON.parse(raw):def;return v===null||v===undefined?def:v}catch(e){return def}}
 function getStats(){return safeParse(localStorage.getItem('plantifi_stats_'+(currentUser?currentUser.username:'guest')),{})}
-function track(key,val){var s=getStats();s[key]=(s[key]||0)+(val||1);var xpMap={views:1,chats:2,quiz:15,waters:5,compares:3,exports:5,secret:50,profile:25,garden:10,journal:5,notes:4,events:5,posts:5,likesReceived:3};s.xp=(s.xp||0)+(xpMap[key]||1);localStorage.setItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'),JSON.stringify(s));checkAchievements()}
+function track(key,val){var s=getStats();s[key]=(s[key]||0)+(val||1);var xpMap={views:1,chats:2,quiz:15,waters:5,compares:3,exports:5,secret:50,profile:25,garden:10,journal:5,notes:4,events:5,posts:5,likesReceived:3};s.xp=(s.xp||0)+(xpMap[key]||1);localStorage.setItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'),JSON.stringify(s));checkAchievements();renderXpBadge()}
 function recordChatPlant(pid){var user=currentUser?currentUser.username:'guest';var chats=safeParse(localStorage.getItem('plantifi_chats_'+user),[]);if(chats.indexOf(pid)===-1)chats.push(pid);localStorage.setItem('plantifi_chats_'+user,JSON.stringify(chats));try{track('chats')}catch(e){}}
 var ACHIEVEMENTS=[
   {id:'visit',emoji:'\ud83c\udf31',title:'Первый шаг',desc:'Посетить PlantiFi',check:function(c){return true}},
@@ -1787,21 +1791,28 @@ function renderAchievements(){
   }).join('');
   document.getElementById('achCount').textContent=unlocked.length+' \u0438\u0437 '+ACHIEVEMENTS.length;
 }
-function renderStats(){
-  var c=achievementContext();
-  var needWater=c.garden.filter(function(g){return !g.lastWatered||daysSince(g.lastWatered)>=gardenInterval(g.plantId)}).length;
-  var today=new Date().toDateString();
-  var wateredToday=c.garden.filter(function(g){return g.lastWatered&&new Date(g.lastWatered).toDateString()===today}).length;
-  var xp=c.stats.xp||0;
+function levelInfo(xp){
   var lvls=[
     {min:0,t:'Росток',e:'🌱'}, {min:25,t:'Саженец',e:'🌿'}, {min:75,t:'Цветочек',e:'🌸'},
     {min:150,t:'Садовник',e:'🧑‍🌾'}, {min:300,t:'Мастер сада',e:'🛠️'}, {min:600,t:'Хранитель',e:'🌲'},
     {min:1000,t:'Легенда сада',e:'🏆'}
   ];
-  var cur=lvls[0],nxt=lvls[1];
+  var cur=lvls[0],nxt=lvls[1],pct=100;
   for(var i=0;i<lvls.length;i++){if(xp>=lvls[i].min){cur=lvls[i];nxt=lvls[i+1]||null}}
-  var pct=100;
   if(nxt)pct=Math.max(3,Math.round((xp-cur.min)/(nxt.min-cur.min)*100));
+  return {cur:cur,nxt:nxt,pct:pct,xp:xp};
+}
+function renderXpBadge(){
+  var li=levelInfo(getStats().xp||0);
+  document.getElementById('xpBadge').textContent=li.cur.e+' '+li.cur.t+' · '+li.xp;
+  document.getElementById('xpBadge').title='Уровень садовода: '+li.cur.t+' • XP: '+li.xp+(li.nxt?' • до «'+li.nxt.t+'» ещё '+(li.nxt.min-li.xp):' • максимум!');
+}
+function renderStats(){
+  var c=achievementContext();
+  var needWater=c.garden.filter(function(g){return !g.lastWatered||daysSince(g.lastWatered)>=gardenInterval(g.plantId)}).length;
+  var today=new Date().toDateString();
+  var wateredToday=c.garden.filter(function(g){return g.lastWatered&&new Date(g.lastWatered).toDateString()===today}).length;
+  var li=levelInfo(c.stats.xp||0);
   var cards=[
     ['\ud83c\udf3f',c.garden.length,'Растений в саду'],
     ['\ud83d\udca7',needWater,'Нужно полить'],
@@ -1810,7 +1821,7 @@ function renderStats(){
     ['\ud83d\udcdd',c.notes.length,'Заметок'],
     ['\ud83d\uddd3\ufe0f',c.events.length,'Событий ухода']
   ];
-  document.getElementById('statCards').innerHTML='<div class="level-card"><div class="level-emoji">'+cur.e+'</div><div class="level-info"><div class="level-title">Уровень садовода: '+cur.t+'</div><div class="level-bar"><div class="level-fill" style="width:'+pct+'%"></div></div><div class="level-next">'+(nxt?('До «'+nxt.t+'» осталось '+(nxt.min-xp)+' XP • всего '+xp):('Максимум! '+xp+' XP'))+'</div></div></div>'+cards.map(function(k){
+  document.getElementById('statCards').innerHTML='<div class="level-card"><div class="level-emoji">'+li.cur.e+'</div><div class="level-info"><div class="level-title">Уровень садовода: '+li.cur.t+'</div><div class="level-bar"><div class="level-fill" style="width:'+li.pct+'%"></div></div><div class="level-next">'+(li.nxt?('До «'+li.nxt.t+'» осталось '+(li.nxt.min-li.xp)+' XP • всего '+li.xp):('Максимум! '+li.xp+' XP'))+'</div></div></div>'+cards.map(function(k){
     return '<div class="stat-card"><div class="stat-icon">'+k[0]+'</div><div class="stat-num">'+k[1]+'</div><div class="stat-label">'+k[2]+'</div></div>';
   }).join('');
 }
