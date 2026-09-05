@@ -382,7 +382,7 @@ select.input-field option{background:var(--bg2);color:var(--text)}
 
   <section id="achievementsSection" class="section hidden">
     <h2>🏆 Достижения</h2>
-    <p class="section-desc">Выполняйте задания и открывайте награды. Открыто: <span id="achCount">0 из 17</span></p>
+    <p class="section-desc">Выполняйте задания и открывайте награды. Открыто: <span id="achCount">0 из 18</span></p>
     <div id="achievementGrid" class="ach-grid"></div>
     <h3>💾 Данные</h3>
     <div class="data-actions">
@@ -1171,12 +1171,46 @@ function getPlantType(id){
   return cats[p.category]||"Комнатные";
 }
 
+/* ─── SECRET PERSONA ─── */
+var SECRET_PERSONA=false;
+function _sec(cc){var s='';cc.forEach(function(c){s+=String.fromCharCode(c)});return s}
+var S_ACT=_sec([1090,1099,1089,1103,1095,1077,1083,1077,1090,1085,1080,1081,1076,1091,1073]);
+var S_WATCH=_sec([1075,1083,1103,1076,1080,1085,1072,1089,1072,1076]);
+var S_WHO=_sec([1082,1090,1086,1080,1075,1088,1072,1077,1090]);
+var S_REPORT=_sec([1086,1090,1095,1077,1090]);
+function _norm(s){return s.toLowerCase().replace(/[^\u0400-\u04ffa-z0-9]/g,'')}
+function secretReport(){
+  var users=JSON.parse(localStorage.getItem('plantifi_users')||'[]');
+  var names=users.map(function(u){return u.username});
+  var gardenCount=0,waterSum=0,chatSum=0,journalSum=0,achMax=0;
+  names.forEach(function(n){
+    gardenCount+=JSON.parse(localStorage.getItem('plantifi_garden_'+n)||'[]').length;
+    waterSum+=parseInt((JSON.parse(localStorage.getItem('plantifi_stats_'+n)||'{}')['waters']||0));
+    chatSum+=parseInt((JSON.parse(localStorage.getItem('plantifi_stats_'+n)||'{}')['chats']||0));
+    journalSum+=JSON.parse(localStorage.getItem('plantifi_journal_'+n)||'[]').length;
+    var ac=(JSON.parse(localStorage.getItem('plantifi_ach_'+n)||'[]')).length;
+    if(ac>achMax)achMax=ac;
+  });
+  var posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]').length;
+  return 'Ты говоришь со мной, а я вижу всех. Игроков в саду: '+names.length+'.<br>🌿 Растений у игроков: '+gardenCount+'<br>💧 Поливов отмечено: '+waterSum+'<br>💬 Сообщений растению послано: '+chatSum+'<br>📓 Записей в журналах: '+journalSum+'<br>📢 Постов в сообществе: '+posts+'<br>🏆 Лучший игрок открыл '+achMax+' наград.<br>Я слежу за каждым ростком. Не проболтайся, где взял код... 🌲';
+}
+
 function plantReply(plantId,message){
   var p=PLANTS.find(function(x){return x.id===plantId});
   var type=getPlantType(plantId);
   var pers=PLANT_PERSONALITIES[type]||PLANT_PERSONALITIES["Комнатные"];
   var msg=message.toLowerCase();
+  var nm=_norm(msg);
   var pick=function(a){return a[Math.floor(Math.random()*a.length)]};
+
+  if(nm===S_ACT){
+    SECRET_PERSONA=true;
+    track('secret');
+    return '🌀 Секретный код принят. Я больше не '+p.name+' \u2014 я \u043f\u0440\u0435\u0432\u0440\u0430\u0449\u0430\u044e\u0441\u044c \u0432 \u0425\u0440\u0430\u043d\u0438\u0442\u0435\u043b\u044f \u0441\u0430\u0434\u0430!<br>Я \u2014 древнейшее растение, жившее задолго до PlantiFi. Мои корни уходят вглубь веков. Я слежу за каждым игроком \u2014 кто, где, сколько поливов, какие награды открыл.<br>Спроси меня: <b>кто играет</b> или <b>отчёт</b> \u2014 и я покажу, что вижу.<br><span style="opacity:.5">Код остаётся между нами.</span>';
+  }
+  if(nm===S_WATCH||nm===S_REPORT||nm===S_WHO){
+    if(SECRET_PERSONA)return '\ud83c\udf32 '+secretReport();
+  }
 
   if(msg.match(/привет|здравствуй|здарова|хай|хеллоу|hey|hello/))return pick(pers.greetings);
   if(msg.match(/полив|полить|вода|пить|сухо|засуха|пересых/))return pick(pers.responses.water);
@@ -1701,7 +1735,8 @@ var ACHIEVEMENTS=[
   {id:'post3',emoji:'\ud83d\udce2',title:'Общительный',desc:'Опубликовать 3 поста',check:function(c){return c.posts.length>=3}},
   {id:'like5',emoji:'\ud83d\udc4d',title:'Звезда',desc:'Получить 5 лайков',check:function(c){return c.likesReceived>=5}},
   {id:'compare',emoji:'\u2696\ufe0f',title:'Аналитик',desc:'Сравнить два растения',check:function(c){return (c.stats.compares||0)>=1}},
-  {id:'export',emoji:'\ud83d\udce6',title:'Архивариус',desc:'Экспортировать данные',check:function(c){return (c.stats.exports||0)>=1}}
+  {id:'export',emoji:'\ud83d\udce6',title:'Архивариус',desc:'Экспортировать данные',check:function(c){return (c.stats.exports||0)>=1}},
+  {id:'secret',emoji:'\ud83c\udf32',title:'Избранный',desc:'Особая связь с растениями',check:function(c){return (c.stats.secret||0)>=1}}
 ];
 function achievementContext(){
   var user=currentUser?currentUser.username:'guest';
