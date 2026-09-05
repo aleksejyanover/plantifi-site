@@ -218,6 +218,13 @@ select.input-field option{background:var(--bg2);color:var(--text)}
 .stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem}
 .stat-card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;text-align:center;box-shadow:0 2px 10px var(--shadow);transition:all .2s}
 .stat-card:hover{border-color:var(--primary);transform:translateY(-3px)}
+.level-card{grid-column:1/-1;display:flex;gap:1rem;align-items:center;padding:1.1rem 1.3rem;background:linear-gradient(120deg,var(--surface2),var(--surface));border:1px solid var(--primary);border-radius:var(--radius);box-shadow:0 4px 18px var(--glow)}
+.level-emoji{font-size:2.4rem}
+.level-info{flex:1}
+.level-title{font-weight:700;font-size:1.02rem;margin-bottom:.45rem;background:linear-gradient(120deg,var(--primary-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.level-bar{height:10px;background:var(--bg3);border-radius:999px;overflow:hidden}
+.level-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .5s ease}
+.level-next{font-size:.75rem;color:var(--text-muted);margin-top:.35rem}
 .stat-card .stat-icon{font-size:1.8rem}
 .stat-card .stat-num{font-size:2rem;font-weight:700;color:var(--primary-light);margin:.3rem 0}
 .stat-card .stat-label{font-size:.78rem;color:var(--text-muted)}
@@ -1328,6 +1335,7 @@ function register(){
   localStorage.setItem('plantifi_users',JSON.stringify(users));
   currentUser={username:u};
   localStorage.setItem('plantifi_user',JSON.stringify(currentUser));
+  track('profile');
   closeModal('authModal');
   updateUI();
 }
@@ -1553,6 +1561,7 @@ function addJournalEntry(){
     localStorage.setItem('plantifi_journal_'+currentUser.username,JSON.stringify(entries));
     document.getElementById('journalText').value='';
     document.getElementById('photoPreview').classList.add('hidden');
+    track('journal');
     checkAchievements();
     renderJournal();
   };
@@ -1599,6 +1608,7 @@ function addNote(){
   localStorage.setItem('plantifi_notes_'+currentUser.username,JSON.stringify(notes));
   document.getElementById('noteTitle').value='';
   document.getElementById('noteText').value='';
+  track('notes');
   checkAchievements();
   renderNotes();
 }
@@ -1652,6 +1662,7 @@ function addCalendarEvent(){
   events.push({id:Date.now(),date:selectedCalDate,plantId:+plantId,type:type,note:note});
   localStorage.setItem('plantifi_events_'+currentUser.username,JSON.stringify(events));
   document.getElementById('eventNote').value='';
+  track('events');
   checkAchievements();
   document.getElementById('calendarEventForm').style.display='none';
   selectedCalDate=null;
@@ -1702,6 +1713,7 @@ function addCommunityPost(){
   posts.push({id:Date.now(),author:currentUser.username,text:text,category:category,likes:0,date:new Date().toISOString()});
   localStorage.setItem('plantifi_community',JSON.stringify(posts));
   document.getElementById('communityPost').value='';
+  track('posts');
   checkAchievements();
   renderCommunity();
 }
@@ -1726,7 +1738,7 @@ function esc(s){var d=document.createElement('div');d.textContent=s;return d.inn
 /* ─── STATS & ACHIEVEMENTS ─── */
 function safeParse(raw,def){try{var v=raw?JSON.parse(raw):def;return v===null||v===undefined?def:v}catch(e){return def}}
 function getStats(){return safeParse(localStorage.getItem('plantifi_stats_'+(currentUser?currentUser.username:'guest')),{})}
-function track(key,val){var s=getStats();s[key]=(s[key]||0)+(val||1);localStorage.setItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'),JSON.stringify(s));checkAchievements()}
+function track(key,val){var s=getStats();s[key]=(s[key]||0)+(val||1);var xpMap={views:1,chats:2,quiz:15,waters:5,compares:3,exports:5,secret:50,profile:25,garden:10,journal:5,notes:4,events:5,posts:5,likesReceived:3};s.xp=(s.xp||0)+(xpMap[key]||1);localStorage.setItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'),JSON.stringify(s));checkAchievements()}
 function recordChatPlant(pid){var user=currentUser?currentUser.username:'guest';var chats=safeParse(localStorage.getItem('plantifi_chats_'+user),[]);if(chats.indexOf(pid)===-1)chats.push(pid);localStorage.setItem('plantifi_chats_'+user,JSON.stringify(chats));try{track('chats')}catch(e){}}
 var ACHIEVEMENTS=[
   {id:'visit',emoji:'\ud83c\udf31',title:'Первый шаг',desc:'Посетить PlantiFi',check:function(c){return true}},
@@ -1780,15 +1792,25 @@ function renderStats(){
   var needWater=c.garden.filter(function(g){return !g.lastWatered||daysSince(g.lastWatered)>=gardenInterval(g.plantId)}).length;
   var today=new Date().toDateString();
   var wateredToday=c.garden.filter(function(g){return g.lastWatered&&new Date(g.lastWatered).toDateString()===today}).length;
-  var cards=[
-    ['\ud83c\udf3f',c.garden.length,'\u0420\u0430\u0441\u0442\u0435\u043d\u0438\u0439 \u0432 \u0441\u0430\u0434\u0443'],
-    ['\ud83d\udca7',needWater,'\u041d\u0443\u0436\u043d\u043e \u043f\u043e\u043b\u0438\u0442\u044c'],
-    ['\ud83d\udc94',wateredToday,'\u041f\u043e\u043b\u0438\u0442\u043e \u0441\u0435\u0433\u043e\u0434\u043d\u044f'],
-    ['\ud83d\udcd3',c.journal.length,'\u0417\u0430\u043f\u0438\u0441\u0435\u0439 \u0432 \u0436\u0443\u0440\u043d\u0430\u043b\u0435'],
-    ['\ud83d\udcdd',c.notes.length,'\u0417\u0430\u043c\u0435\u0442\u043e\u043a'],
-    ['\ud83d\uddd3\ufe0f',c.events.length,'\u0421\u043e\u0431\u044b\u0442\u0438\u0439 \u0443\u0445\u043e\u0434\u0430']
+  var xp=c.stats.xp||0;
+  var lvls=[
+    {min:0,t:'Росток',e:'🌱'}, {min:25,t:'Саженец',e:'🌿'}, {min:75,t:'Цветочек',e:'🌸'},
+    {min:150,t:'Садовник',e:'🧑‍🌾'}, {min:300,t:'Мастер сада',e:'🛠️'}, {min:600,t:'Хранитель',e:'🌲'},
+    {min:1000,t:'Легенда сада',e:'🏆'}
   ];
-  document.getElementById('statCards').innerHTML=cards.map(function(k){
+  var cur=lvls[0],nxt=lvls[1];
+  for(var i=0;i<lvls.length;i++){if(xp>=lvls[i].min){cur=lvls[i];nxt=lvls[i+1]||null}}
+  var pct=100;
+  if(nxt)pct=Math.max(3,Math.round((xp-cur.min)/(nxt.min-cur.min)*100));
+  var cards=[
+    ['\ud83c\udf3f',c.garden.length,'Растений в саду'],
+    ['\ud83d\udca7',needWater,'Нужно полить'],
+    ['\ud83d\udc94',wateredToday,'Полито сегодня'],
+    ['\ud83d\udcd3',c.journal.length,'Записей в журнале'],
+    ['\ud83d\udcdd',c.notes.length,'Заметок'],
+    ['\ud83d\uddd3\ufe0f',c.events.length,'Событий ухода']
+  ];
+  document.getElementById('statCards').innerHTML='<div class="level-card"><div class="level-emoji">'+cur.e+'</div><div class="level-info"><div class="level-title">Уровень садовода: '+cur.t+'</div><div class="level-bar"><div class="level-fill" style="width:'+pct+'%"></div></div><div class="level-next">'+(nxt?('До «'+nxt.t+'» осталось '+(nxt.min-xp)+' XP • всего '+xp):('Максимум! '+xp+' XP'))+'</div></div></div>'+cards.map(function(k){
     return '<div class="stat-card"><div class="stat-icon">'+k[0]+'</div><div class="stat-num">'+k[1]+'</div><div class="stat-label">'+k[2]+'</div></div>';
   }).join('');
 }
@@ -1842,6 +1864,7 @@ function addPlantToGarden(){
   if(garden.some(function(x){return x.plantId===pid})){alert('\u042d\u0442\u043e \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u0435 \u0443\u0436\u0435 \u0432 \u043f\u0430\u0448\u0438 \u0441\u0430\u0434\u0443');return}
   garden.push({plantId:pid,lastWatered:null});
   localStorage.setItem(gardenKey(),JSON.stringify(garden));
+  track('garden');
   checkAchievements();
   renderGarden();
 }
