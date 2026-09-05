@@ -796,7 +796,6 @@ function comparePlants(){
   document.getElementById('compareResult').innerHTML=verdict+'<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440</th><th>'+A.emoji+' '+esc(A.name)+'</th><th>'+B.emoji+' '+esc(B.name)+'</th></tr></thead><tbody>'+rows().map(function(r){
     return '<tr><td>'+r[0]+'</td>'+cell(r[1])+cell(r[2])+'</tr>';
   }).join('')+'</tbody></table></div>';
-  document.getElementById('compareResult').scrollIntoView({behavior:'smooth'});
 }
 
 /* ─── EXPORT / IMPORT ─── */
