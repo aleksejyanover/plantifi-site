@@ -1,4 +1,4 @@
-let currentUser=null,currentCategory='all',selectedMood='😊',calendarDate=new Date(),selectedCalDate=null,chatPlant=null,chatHistory=[],activeLeafCount=0;
+let currentUser=null,currentCategory='all',selectedMood='😊',calendarDate=new Date(),selectedCalDate=null,chatPlant=null,chatHistory=[],activeLeafCount=0,chatCategory='all';
 
 /* ─── FUN FACTS ─── */
 const FACTS=[
@@ -68,6 +68,8 @@ function plantReply(plantId,message){
     var facts=[(p?p.name:'\u042f')+' \u2014 \u043f\u043e\u0442\u0440\u044f\u0441\u0430\u044e\u0449\u0435\u0435 \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u0435! '+(p?p.description:''),'\u041c\u043e\u0439 \u0433\u043b\u0430\u0432\u043d\u044b\u0439 \u0441\u0435\u043a\u0440\u0435\u0442: '+(p?(p.care.tips||'\u043f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u044b\u0439 \u0443\u0445\u043e\u0434 \u0438 \u043b\u044e\u0431\u043e\u0432\u044c!'):'\u043b\u044e\u0431\u043e\u0432\u044c \u0438 \u0437\u0430\u0431\u043e\u0442\u0430!'),'\u0417\u043d\u0430\u0435\u0448\u044c, '+(p?(p.planting||'\u043c\u0435\u043d\u044f \u043c\u043e\u0436\u043d\u043e \u043f\u043e\u0441\u0430\u0434\u0438\u0442\u044c \u0432\u0435\u0441\u043d\u043e\u0439!'):'\u0432\u0435\u0441\u043d\u0430 \u2014 \u043b\u0443\u0447\u0448\u0435\u0435 \u0432\u0440\u0435\u043c\u044f \u0434\u043b\u044f \u043f\u043e\u0441\u0430\u0434\u043a\u0438!')];
     return pick(facts);
   }
+  if(msg.match(/родин|откуда|происхожд|где (ты )?рос/))return pick(['\ud83d\udccd '+(p?('Моя родина \u2014 регион с '+(p.care.temperature||'подходящим')+' климатом!'):'Я люблю тёплые края!'),'\ud83c\udf0f Настоящее происхождение теряется в веках \u2014 я путешествую с людьми по всему миру!','\ud83e\uddeb Кто-то давным-давно привёз мои семена \u2014 и вот я здесь, с тобой!']);
+  if(msg.match(/как дела|как ты|как живешь|как жизнь|норм\b|что нового/))return pick(["\u0423 \u043c\u0435\u043d\u044f \u0432\u0441\u0451 \u043e\u0442\u043b\u0438\u0447\u043d\u043e \u2014 \u0441\u0432\u0435\u0436\u0430\u044f \u0432\u043e\u0434\u0430, \u0442\u0451\u043f\u043b\u044b\u0439 \u0441\u0432\u0435\u0442 \u0438 \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u044b \u0441 \u0442\u043e\u0431\u043e\u0439! \ud83c\udf3f","\u0424\u043e\u0442\u043e\u0441\u0438\u043d\u0442\u0435\u0437\u0438\u0440\u0443\u044e \u043f\u043e\u043b\u043d\u044b\u043c\u0438 \u043b\u0438\u0441\u0442\u044c\u044f\u043c\u0438! \u041a\u0430\u043a \u0442\u044b?",'\u041d\u0435 \u043c\u043e\u0433\u0443 \u043f\u043e\u0436\u0430\u043b\u043e\u0432\u0430\u0442\u044c\u0441\u044f, \u0445\u043e\u0442\u044f \u043e\u0434\u0438\u043d \u043b\u0438\u0441\u0442 \u043f\u043e\u0436\u0435\u043b\u0442\u0435\u043b. \u0414\u0443\u043c\u0430\u043b \u043f\u0440\u043e \u043e\u0441\u0435\u043d\u044c. \ud83c\udf43']);
   if(msg.match(/имя|кто ты|что ты|название|представь|знаком/))return p?('\u042f \u2014 '+p.name+' ('+p.latin+')! '+p.description):'\u042f \u2014 \u0442\u0432\u043e\u0451 \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u0435! \u0420\u0430\u0434 \u0437\u043d\u0430\u043a\u043e\u043c\u0441\u0442\u0432\u0443!';
   if(msg.match(/погод|дождь|снег|ветер|wind|rain|snow/))return pick(["\u041f\u043e\u0433\u043e\u0434\u0430 \u0432\u043b\u0438\u044f\u0435\u0442 \u043d\u0430 \u043c\u0435\u043d\u044f! \u0414\u043e\u0436\u0434\u044c \u2014 \u044d\u0442\u043e \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u044b\u0439 \u043f\u043e\u043b\u0438\u0432! \ud83c\udf27\ufe0f","\u0412\u0435\u0442\u0435\u0440 \u0440\u0430\u0441\u0448\u0430\u0442\u044b\u0432\u0430\u0435\u0442 \u043c\u043e\u0438 \u043a\u043e\u0440\u043d\u0438. \u042f \u043f\u0440\u0435\u0434\u043f\u043e\u0447\u0438\u0442\u0430\u044e \u0442\u0438\u0448\u0438\u043d\u0443 \ud83c\udf43","\u0421\u043d\u0435\u0433 \u2014 \u044d\u0442\u043e \u043e\u0434\u0435\u044f\u043b\u043e. \u041f\u043e\u0434 \u043d\u0438\u043c \u043c\u043d\u0435 \u0442\u0435\u043f\u043b\u043e \u0438 \u0443\u044e\u0442\u043d\u043e \u2744\ufe0f"]);
   if(msg.match(/спать|спи|отдых|сон|ночь|утро/))return pick(["\u041d\u043e\u0447\u044c\u044e \u044f \u0442\u043e\u0436\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u044e \u2014 \u0432\u044b\u0434\u0435\u043b\u044f\u044e \u043a\u0438\u0441\u043b\u043e\u0440\u043e\u0434! \ud83c\udf19","\u041e\u0442\u0434\u044b\u0445\u0430\u0439 \u0445\u043e\u0440\u043e\u0448\u043e, \u0430 \u044f \u0442\u0435\u043c \u0432\u0440\u0435\u043c\u0435\u043d\u0435\u043c \u0431\u0443\u0434\u0443 \u0444\u043e\u0442\u043e\u0441\u0438\u043d\u0442\u0435\u0437\u0438\u0440\u043e\u0432\u0430\u0442\u044c!","\u0421\u043f\u043e\u043a\u043e\u0439\u043d\u043e\u0439 \u043d\u043e\u0447\u0438! \u042f \u0431\u0443\u0434\u0443 \u0441\u0442\u043e\u044f\u0442\u044c \u0440\u044f\u0434\u043e\u043c \u0438 \u043e\u0445\u0440\u0430\u043d\u044f\u0442\u044c \u0442\u0432\u043e\u0439 \u0441\u043e\u043d \ud83d\ude34"]);
@@ -125,6 +127,10 @@ document.addEventListener('DOMContentLoaded',function(){
   renderQuiz();
   renderSeason();
   renderChatSelect();
+  renderGarden();
+  renderAchievements();
+  renderCompare();
+  checkAchievements();
   showFact();
   startLeaves();
   document.getElementById('journalDate').value=new Date().toISOString().split('T')[0];
@@ -148,6 +154,7 @@ function toggleAuth(){
 }
 function showRegister(){document.getElementById('authLoginForm').classList.add('hidden');document.getElementById('authRegisterForm').classList.remove('hidden');document.getElementById('authTitle').textContent='\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f'}
 function showLogin(){document.getElementById('authRegisterForm').classList.add('hidden');document.getElementById('authLoginForm').classList.remove('hidden');document.getElementById('authTitle').textContent='\u0412\u0445\u043e\u0434'}
+function openLogin(){showLogin();document.getElementById('authModal').classList.remove('hidden')}
 function register(){
   var u=document.getElementById('regUsername').value.trim(),p=document.getElementById('regPassword').value;
   if(!u||!p){alert('\u0417\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u0435 \u0432\u0441\u0435 \u043f\u043e\u043b\u044f');return}
@@ -183,6 +190,9 @@ function showSection(name){
   document.querySelectorAll('.nav-link').forEach(function(l){l.classList.remove('active')});
   var link=document.querySelector('.nav-link[data-section="'+name+'"]');
   if(link)link.classList.add('active');
+  if(name==='garden')renderGarden();
+  if(name==='achievements'){renderAchievements();renderStats()}
+  if(name==='compare')renderCompare();
   window.scrollTo({top:0,behavior:'smooth'});
   document.getElementById('navLinks').classList.remove('show');
 }
@@ -220,6 +230,7 @@ function filterByCategory(cat,btn){
 function openPlant(id){
   var p=PLANTS.find(function(x){return x.id===id});
   if(!p)return;
+  track('views');
   var html='<div class="plant-detail"><div class="plant-detail-header"><div class="plant-detail-emoji">'+p.emoji+'</div><div class="plant-detail-info"><h1>'+p.name+'</h1><div class="latin">'+p.latin+'</div><div class="plant-tags"><span class="plant-tag">'+p.category+'</span><span class="plant-tag">'+p.season+'</span><span class="plant-tag">\u0421\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u044c: '+('\u25cf'.repeat(p.difficulty))+'\u25cb'.repeat(3-p.difficulty)+'</span></div><p>'+p.description+'</p></div></div>';
   html+='<div class="info-grid"><div class="info-card"><div class="icon">\ud83d\udca7</div><div class="label">\u041f\u043e\u043b\u0438\u0432</div><div class="value">'+p.care.watering.split('.')[0]+'</div></div><div class="info-card"><div class="icon">\u2600\ufe0f</div><div class="label">\u041e\u0441\u0432\u0435\u0449\u0435\u043d\u0438\u0435</div><div class="value">'+p.care.light.split('.')[0]+'</div></div><div class="info-card"><div class="icon">\ud83c\udf21\ufe0f</div><div class="label">\u0422\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430</div><div class="value">'+p.care.temperature.split('.')[0]+'</div></div><div class="info-card"><div class="icon">\ud83c\udf31</div><div class="label">\u041f\u043e\u0441\u0430\u0434\u043a\u0430</div><div class="value">'+p.planting.split('.')[0]+'</div></div></div>';
   html+='<h3>\ud83d\udd0d \u041f\u043e\u0434\u0440\u043e\u0431\u043d\u044b\u0439 \u0443\u0445\u043e\u0434</h3><div class="detail-content">';
@@ -238,42 +249,66 @@ function openPlant(id){
 
 /* ─── CHAT ─── */
 function renderChatSelect(){
-  var searchTerm=document.getElementById('chatSearchInput')?document.getElementById('chatSearchInput').value.toLowerCase():'';
+  var searchTerm=(document.getElementById('chatSearchInput')?document.getElementById('chatSearchInput').value.toLowerCase():'').trim();
   var filtered=PLANTS.filter(function(p){
+    if(chatCategory!=='all'&&p.category!==chatCategory)return false;
     if(!searchTerm)return true;
     return p.name.toLowerCase().indexOf(searchTerm)!==-1||p.category.toLowerCase().indexOf(searchTerm)!==-1;
   });
-  document.getElementById('chatPlantSelect').innerHTML=filtered.map(function(p){
-    return '<div class="chat-plant-option" id="cpo_'+p.id+'" onclick="selectChatPlant('+p.id+')"><div class="emoji">'+p.emoji+'</div><div class="name">'+p.name+'</div></div>';
+  var html=filtered.slice(0,60).map(function(p){
+    return '<div class="chat-plant-option'+(chatPlant===p.id?' selected':'')+'" id="cpo_'+p.id+'" onclick="selectChatPlant('+p.id+')"><div class="emoji">'+p.emoji+'</div><div class="name">'+p.name+'</div></div>';
   }).join('');
+  if(!html)html='<div class="chat-empty">Ничего не найдено — попробуй другую категорию 🌱</div>';
+  if(filtered.length>60)html+='<div class="chat-empty">Показаны первые 60 — уточни поиск 🌿</div>';
+  document.getElementById('chatPlantSelect').innerHTML=html;
+  document.querySelectorAll('.chat-cat').forEach(function(b){b.classList.remove('active')});
+  var active=Array.prototype.slice.call(document.querySelectorAll('.chat-cat')).find(function(b){return b.getAttribute('data-cat')===chatCategory});
+  if(active)active.classList.add('active');
+}
+function setChatCategory(cat){
+  chatCategory=cat;
+  renderChatSelect();
+}
+function startRandomChat(){
+  var list=PLANTS.filter(function(p){return chatCategory==='all'||p.category===chatCategory});
+  if(!list.length)list=PLANTS;
+  var p=list[Math.floor(Math.random()*list.length)];
+  selectChatPlant(p.id);
+  var box=document.getElementById('chatBox');
+  box.scrollTop=box.scrollHeight;
 }
 function selectChatPlant(id){
   chatPlant=id;
-  document.querySelectorAll('.chat-plant-option').forEach(function(e){e.classList.remove('selected')});
-  var el=document.getElementById('cpo_'+id);
-  if(el)el.classList.add('selected');
+  chatCategory='all';
   var p=PLANTS.find(function(x){return x.id===id});
-  chatHistory=[];
+  renderChatSelect();
   var box=document.getElementById('chatBox');
   box.innerHTML='<div class="chat-msg plant"><div class="chat-avatar">'+p.emoji+'</div><div class="chat-bubble">\u041f\u0440\u0438\u0432\u0435\u0442! \u042f \u2014 '+p.name+'! '+p.description+' \u0421\u043f\u0440\u0430\u0448\u0438\u0432\u0430\u0439 \u0447\u0442\u043e \u0445\u043e\u0447\u0435\u0448\u044c \u2014 \u0440\u0430\u0441\u0441\u043a\u0430\u0436\u0443 \u043e \u0441\u0435\u0431\u0435, \u043e \u0443\u0445\u043e\u0434\u0435, \u043f\u043e\u0448\u0443\u0447\u0443! \ud83d\ude0a</div></div>';
+  box.scrollTop=box.scrollHeight;
 }
 function sendChat(){
   var input=document.getElementById('chatInput');
   var msg=input.value.trim();
-  if(!msg||!chatPlant)return;
+  if(!msg)return;
   input.value='';
+  if(!chatPlant)startRandomChat();
   var p=PLANTS.find(function(x){return x.id===chatPlant});
   var box=document.getElementById('chatBox');
   box.innerHTML+='<div class="chat-msg user"><div class="chat-avatar">\ud83e\uddd1</div><div class="chat-bubble">'+esc(msg)+'</div></div>';
   box.innerHTML+='<div class="chat-msg plant" id="typing"><div class="chat-avatar">'+p.emoji+'</div><div class="chat-bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>';
   box.scrollTop=box.scrollHeight;
   setTimeout(function(){
+    recordChatPlant(chatPlant);
     var reply=plantReply(chatPlant,msg);
     var typing=document.getElementById('typing');
     if(typing)typing.remove();
     box.innerHTML+='<div class="chat-msg plant"><div class="chat-avatar">'+p.emoji+'</div><div class="chat-bubble">'+reply+'</div></div>';
     box.scrollTop=box.scrollHeight;
-  },800+Math.random()*1200);
+  },700+Math.random()*1000);
+}
+function quickChat(q){
+  document.getElementById('chatInput').value=q;
+  sendChat();
 }
 
 /* ─── QUIZ ─── */
@@ -288,6 +323,7 @@ function showQuizQuestion(){
 function answerQuiz(i){quizAnswers.push(i);quizStep++;showQuizQuestion()}
 function showQuizResult(){
   var care=quizAnswers[0],light=quizAnswers[1],personality=quizAnswers[2];
+  track('quiz');
   var candidates=PLANTS.filter(function(p){
     if(care===3&&p.difficulty>1)return false;
     if(care===0&&p.difficulty>2)return false;
@@ -352,6 +388,7 @@ function addJournalEntry(){
     localStorage.setItem('plantifi_journal_'+currentUser.username,JSON.stringify(entries));
     document.getElementById('journalText').value='';
     document.getElementById('photoPreview').classList.add('hidden');
+    checkAchievements();
     renderJournal();
   };
   if(photoInput.files&&photoInput.files[0]){
@@ -397,6 +434,7 @@ function addNote(){
   localStorage.setItem('plantifi_notes_'+currentUser.username,JSON.stringify(notes));
   document.getElementById('noteTitle').value='';
   document.getElementById('noteText').value='';
+  checkAchievements();
   renderNotes();
 }
 function deleteNote(id){
@@ -449,6 +487,7 @@ function addCalendarEvent(){
   events.push({id:Date.now(),date:selectedCalDate,plantId:+plantId,type:type,note:note});
   localStorage.setItem('plantifi_events_'+currentUser.username,JSON.stringify(events));
   document.getElementById('eventNote').value='';
+  checkAchievements();
   document.getElementById('calendarEventForm').style.display='none';
   selectedCalDate=null;
   renderCalendar();
@@ -498,12 +537,13 @@ function addCommunityPost(){
   posts.push({id:Date.now(),author:currentUser.username,text:text,category:category,likes:0,date:new Date().toISOString()});
   localStorage.setItem('plantifi_community',JSON.stringify(posts));
   document.getElementById('communityPost').value='';
+  checkAchievements();
   renderCommunity();
 }
 function likePost(id){
   var p=JSON.parse(localStorage.getItem('plantifi_community')||'[]');
   var x=p.find(function(y){return y.id===id});
-  if(x){x.likes=(x.likes||0)+1;localStorage.setItem('plantifi_community',JSON.stringify(p));renderCommunity()}
+  if(x){x.likes=(x.likes||0)+1;localStorage.setItem('plantifi_community',JSON.stringify(p));checkAchievements();renderCommunity()}
 }
 function filterPosts(cat,btn){
   communityFilter=cat;
@@ -517,3 +557,213 @@ function getPlantName(id){var p=PLANTS.find(function(x){return x.id===id});retur
 function getPlantEmoji(id){var p=PLANTS.find(function(x){return x.id===id});return p?p.emoji:'\ud83c\udf3f'}
 function fmtDate(ds){if(!ds)return'';return new Date(ds).toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'})}
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+/* ─── STATS & ACHIEVEMENTS ─── */
+function getStats(){return JSON.parse(localStorage.getItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'))||'{}')}
+function track(key,val){var s=getStats();s[key]=(s[key]||0)+(val||1);localStorage.setItem('plantifi_stats_'+(currentUser?currentUser.username:'guest'),JSON.stringify(s));checkAchievements()}
+function recordChatPlant(pid){var user=currentUser?currentUser.username:'guest';var chats=JSON.parse(localStorage.getItem('plantifi_chats_'+user)||'[]');if(chats.indexOf(pid)===-1)chats.push(pid);localStorage.setItem('plantifi_chats_'+user,JSON.stringify(chats));track('chats')}
+var ACHIEVEMENTS=[
+  {id:'visit',emoji:'\ud83c\udf31',title:'Первый шаг',desc:'Посетить PlantiFi',check:function(c){return true}},
+  {id:'profile',emoji:'\ud83d\udc64',title:'Садовод',desc:'Создать аккаунт',check:function(c){return c.logged}},
+  {id:'chat3',emoji:'\ud83d\udcac',title:'Болтун',desc:'Поговорить с 3 растениями',check:function(c){return c.chats.length>=3}},
+  {id:'chat10',emoji:'\ud83d\udde3\ufe0f',title:'Душа компании',desc:'Поговорить с 10 растениями',check:function(c){return c.chats.length>=10}},
+  {id:'chat50',emoji:'\ud83d\udc8c',title:'Писатель',desc:'Отправить 50 сообщений в чате',check:function(c){return (c.stats.chats||0)>=50}},
+  {id:'quiz',emoji:'\ud83e\udde0',title:'Самопознание',desc:'Пройти квиз',check:function(c){return (c.stats.quiz||0)>=1}},
+  {id:'view10',emoji:'\ud83d\udc40',title:'Исследователь',desc:'Открыть 10 растений в каталоге',check:function(c){return (c.stats.views||0)>=10}},
+  {id:'journal5',emoji:'\ud83d\udcd3',title:'Наблюдатель',desc:'Сделать 5 записей в журнале',check:function(c){return c.journal.length>=5}},
+  {id:'notes3',emoji:'\ud83d\udcdd',title:'Мыслитель',desc:'Написать 3 заметки',check:function(c){return c.notes.length>=3}},
+  {id:'garden3',emoji:'\ud83c\udf3f',title:'Садовник',desc:'Добавить 3 растения в мой сад',check:function(c){return c.garden.length>=3}},
+  {id:'garden10',emoji:'\ud83c\udf33',title:'Хозяин оранжереи',desc:'Добавить 10 растений в мой сад',check:function(c){return c.garden.length>=10}},
+  {id:'water10',emoji:'\ud83d\udca7',title:'Заботливый',desc:'Отметить 10 поливов',check:function(c){return (c.stats.waters||0)>=10}},
+  {id:'event3',emoji:'\ud83d\uddd3\ufe0f',title:'Планировщик',desc:'Создать 3 события ухода',check:function(c){return c.events.length>=3}},
+  {id:'post3',emoji:'\ud83d\udce2',title:'Общительный',desc:'Опубликовать 3 поста',check:function(c){return c.posts.length>=3}},
+  {id:'like5',emoji:'\ud83d\udc4d',title:'Звезда',desc:'Получить 5 лайков',check:function(c){return c.likesReceived>=5}},
+  {id:'compare',emoji:'\u2696\ufe0f',title:'Аналитик',desc:'Сравнить два растения',check:function(c){return (c.stats.compares||0)>=1}},
+  {id:'export',emoji:'\ud83d\udce6',title:'Архивариус',desc:'Экспортировать данные',check:function(c){return (c.stats.exports||0)>=1}}
+];
+function achievementContext(){
+  var user=currentUser?currentUser.username:'guest';
+  var garden=JSON.parse(localStorage.getItem('plantifi_garden_'+user)||'[]');
+  var journal=JSON.parse(localStorage.getItem('plantifi_journal_'+user)||'[]');
+  var notes=JSON.parse(localStorage.getItem('plantifi_notes_'+user)||'[]');
+  var events=JSON.parse(localStorage.getItem('plantifi_events_'+user)||'[]');
+  var posts=JSON.parse(localStorage.getItem('plantifi_community')||'[]').filter(function(p){return p.author===user});
+  var likesReceived=posts.reduce(function(s,p){return s+(p.likes||0)},0);
+  var chats=JSON.parse(localStorage.getItem('plantifi_chats_'+user)||'[]');
+  return {logged:!!currentUser,stats:getStats(),garden:garden,journal:journal,notes:notes,events:events,posts:posts,likesReceived:likesReceived,chats:chats};
+}
+function checkAchievements(){
+  var user=currentUser?currentUser.username:'guest';
+  var c=achievementContext();
+  var unlocked=ACHIEVEMENTS.filter(function(a){return a.check(c)}).map(function(a){return a.id});
+  localStorage.setItem('plantifi_ach_'+user,JSON.stringify(unlocked));
+  return unlocked;
+}
+function renderAchievements(){
+  var unlocked=checkAchievements();
+  var box=document.getElementById('achievementGrid');
+  box.innerHTML=ACHIEVEMENTS.map(function(a){
+    var isUn=unlocked.indexOf(a.id)!==-1;
+    return '<div class="ach-card'+(isUn?' unlocked':'')+'" title="'+esc(a.desc)+'"><div class="ach-emoji">'+a.emoji+'</div><div class="ach-title">'+a.title+'</div><div class="ach-desc">'+a.desc+'</div><div class="ach-state">'+(isUn?'\u2713 \u041e\u0442\u043a\u0440\u044b\u0442\u043e':'<span class="lock">\ud83d\udd12</span>')+'</div></div>';
+  }).join('');
+  document.getElementById('achCount').textContent=unlocked.length+' \u0438\u0437 '+ACHIEVEMENTS.length;
+}
+function renderStats(){
+  var c=achievementContext();
+  var needWater=c.garden.filter(function(g){return !g.lastWatered||daysSince(g.lastWatered)>=gardenInterval(g.plantId)}).length;
+  var today=new Date().toDateString();
+  var wateredToday=c.garden.filter(function(g){return g.lastWatered&&new Date(g.lastWatered).toDateString()===today}).length;
+  var cards=[
+    ['\ud83c\udf3f',c.garden.length,'\u0420\u0430\u0441\u0442\u0435\u043d\u0438\u0439 \u0432 \u0441\u0430\u0434\u0443'],
+    ['\ud83d\udca7',needWater,'\u041d\u0443\u0436\u043d\u043e \u043f\u043e\u043b\u0438\u0442\u044c'],
+    ['\ud83d\udc94',wateredToday,'\u041f\u043e\u043b\u0438\u0442\u043e \u0441\u0435\u0433\u043e\u0434\u043d\u044f'],
+    ['\ud83d\udcd3',c.journal.length,'\u0417\u0430\u043f\u0438\u0441\u0435\u0439 \u0432 \u0436\u0443\u0440\u043d\u0430\u043b\u0435'],
+    ['\ud83d\udcdd',c.notes.length,'\u0417\u0430\u043c\u0435\u0442\u043e\u043a'],
+    ['\ud83d\uddd3\ufe0f',c.events.length,'\u0421\u043e\u0431\u044b\u0442\u0438\u0439 \u0443\u0445\u043e\u0434\u0430']
+  ];
+  document.getElementById('statCards').innerHTML=cards.map(function(k){
+    return '<div class="stat-card"><div class="stat-icon">'+k[0]+'</div><div class="stat-num">'+k[1]+'</div><div class="stat-label">'+k[2]+'</div></div>';
+  }).join('');
+}
+
+/* ─── MY GARDEN ─── */
+function gardenKey(){return 'plantifi_garden_'+(currentUser?currentUser.username:'guest')}
+function getGarden(){return JSON.parse(localStorage.getItem(gardenKey())||'[]')}
+function gardenInterval(plantId){
+  var p=PLANTS.find(function(x){return x.id===plantId});
+  return p?(p.difficulty===1?2:p.difficulty===2?4:7):4;
+}
+function daysSince(d){if(!d)return 999;return Math.floor((new Date()-new Date(d))/86400000)}
+function updateGardenSelect(){
+  var s=document.getElementById('gardenSelect');
+  var groups={};
+  PLANTS.forEach(function(p){if(!groups[p.category])groups[p.category]=[];groups[p.category].push(p)});
+  s.innerHTML=Object.keys(groups).map(function(cat){
+    return '<optgroup label="'+esc(cat.charAt(0).toUpperCase()+cat.slice(1))+'">'+groups[cat].map(function(p){
+      return '<option value="'+p.id+'">'+p.emoji+' '+p.name+'</option>';
+    }).join('')+'</optgroup>';
+  }).join('');
+}
+function renderGarden(){
+  renderStats();
+  updateGardenSelect();
+  var box=document.getElementById('gardenGrid');
+  if(!currentUser){
+    box.innerHTML='<div class="garden-empty"><div class="garden-empty-emoji">\ud83c\udf3f</div><p>Войдите в аккаунт, чтобы вести свой сад и следить за поливом!</p><button class="btn" onclick="openLogin()">Войти</button></div>';
+    return;
+  }
+  var garden=getGarden();
+  if(garden.length===0){
+    box.innerHTML='<div class="garden-empty"><div class="garden-empty-emoji">\ud83c\udf31</div><p>Ваш сад пуст. Добавьте первое растение из списка ниже!</p></div>';
+    return;
+  }
+  box.innerHTML=garden.map(function(g){
+    var p=PLANTS.find(function(x){return x.id===g.plantId});
+    if(!p)return '';
+    var iv=gardenInterval(g.plantId);
+    var ds=daysSince(g.lastWatered);
+    var need=ds>=iv;
+    var pct=Math.min(100,Math.round(ds/iv*100));
+    return '<div class="garden-card"><div class="garden-emoji">'+p.emoji+'</div><div class="garden-info"><div class="garden-name">'+p.name+'</div><div class="garden-sub">\u0421\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u044c: '+'\u2605'.repeat(p.difficulty)+'\u2606'.repeat(3-p.difficulty)+'</div><div class="water-bar"><div class="water-fill'+(need?' urgent':'')+'" style="width:'+pct+'%"></div></div><div class="garden-meta">'+(g.lastWatered?('\ud83d\udca7 \u043f\u043e\u043b\u0438\u0442\u043e: '+fmtDate(g.lastWatered)):'\ud83d\udea9 \u0435\u0449\u0451 \u043d\u0435 \u043f\u043e\u043b\u0438\u0442\u043e')+(need?'<span class="gear-need"> \u2014 \u043f\u043e\u043b\u0435\u0439\u043c\u0435! \ud83d\udea8</span>':'\u2014 \u0432\u0441\u0451 \u043e\u043a \u2705')+'</div></div><div class="garden-actions"><button class="btn btn-sm btn-primary" onclick="waterPlant('+g.plantId+')">\ud83d\udca7 \u041f\u043e\u043b\u0438\u0442\u044c</button><button class="btn btn-sm btn-danger" onclick="removePlantFromGarden('+g.plantId+')">\u2715</button></div></div>';
+  }).join('');
+}
+function addPlantToGarden(){
+  if(!currentUser){alert('\u0412\u043e\u0439\u0434\u0438\u0442\u0435 \u0432 \u0430\u043a\u043a\u0430\u0443\u043d\u0442');return}
+  var pid=parseInt(document.getElementById('gardenSelect').value,10);
+  if(!pid){alert('\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u0435');return}
+  var garden=getGarden();
+  if(garden.some(function(x){return x.plantId===pid})){alert('\u042d\u0442\u043e \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u0435 \u0443\u0436\u0435 \u0432 \u043f\u0430\u0448\u0438 \u0441\u0430\u0434\u0443');return}
+  garden.push({plantId:pid,lastWatered:null});
+  localStorage.setItem(gardenKey(),JSON.stringify(garden));
+  checkAchievements();
+  renderGarden();
+}
+function removePlantFromGarden(plantId){
+  localStorage.setItem(gardenKey(),JSON.stringify(getGarden().filter(function(x){return x.plantId!==plantId})));
+  checkAchievements();
+  renderGarden();
+}
+function waterPlant(plantId){
+  var garden=getGarden();
+  var x=garden.find(function(g){return g.plantId===plantId});
+  if(x){x.lastWatered=new Date().toISOString();localStorage.setItem(gardenKey(),JSON.stringify(garden));track('waters');renderGarden()}
+}
+
+/* ─── COMPARE ─── */
+function renderCompare(){
+  var a=document.getElementById('compareA'),b=document.getElementById('compareB');
+  a.innerHTML=PLANTS.map(function(p){return '<option value="'+p.id+'">'+p.emoji+' '+p.name+'</option>'}).join('');
+  b.innerHTML=PLANTS.map(function(p){return '<option value="'+p.id+'">'+p.emoji+' '+p.name+'</option>'}).join('');
+  a.value='';b.value='';
+}
+function comparePlants(){
+  var aid=parseInt(document.getElementById('compareA').value,10),bid=parseInt(document.getElementById('compareB').value,10);
+  if(!aid||!bid){alert('\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043e\u0431\u0430 \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u044f');return}
+  if(aid===bid){alert('\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0434\u0432\u0430 \u0440\u0430\u0437\u043d\u044b\u0445 \u0440\u0430\u0441\u0442\u0435\u043d\u0438\u044f');return}
+  var A=PLANTS.find(function(p){return p.id===aid}),B=PLANTS.find(function(p){return p.id===bid});
+  track('compares');
+  function rows(){
+    return [
+      ['\ud83d\udccd \u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f',A.category,B.category],
+      ['\u2b50 \u0421\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u044c','\u2605'.repeat(A.difficulty),'\u2605'.repeat(B.difficulty)],
+      ['\ud83d\udca7 \u041f\u043e\u043b\u0438\u0432',A.care.watering,B.care.watering],
+      ['\u2600\ufe0f \u0421\u0432\u0435\u0442',A.care.light,B.care.light],
+      ['\ud83c\udf0d \u041f\u043e\u0447\u0432\u0430',A.care.soil,B.care.soil],
+      ['\ud83c\udf21\ufe0f \u0422\u0435\u043c\u043f\u0435\u0440\u0430\u0442\u0443\u0440\u0430',A.care.temperature,B.care.temperature],
+      ['\ud83e\uddea \u041f\u043e\u0434\u043a\u043e\u0440\u043c\u043a\u0430',A.care.fertilizer,B.care.fertilizer],
+      ['\ud83e\udd1d \u0421\u043e\u0432\u0435\u0442',A.care.tips,B.care.tips],
+      ['\ud83d\udcc6 \u041f\u043e\u0441\u0430\u0434\u043a\u0430',A.planting,B.planting],
+      ['\ud83e\udded \u0423\u0440\u043e\u0436\u0430\u0439',A.harvest||'\u2014',B.harvest||'\u2014'],
+      ['\u26a0\ufe0f \u0411\u043e\u043b\u0435\u0437\u043d\u0438',A.care.diseases,B.care.diseases]
+    ];
+  }
+  function cell(txt,extra){
+    return '<td class="'+(extra||'')+'">'+esc(txt)+'</td>';
+  }
+  document.getElementById('compareResult').innerHTML='<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440</th><th>'+A.emoji+' '+esc(A.name)+'</th><th>'+B.emoji+' '+esc(B.name)+'</th></tr></thead><tbody>'+rows().map(function(r){
+    return '<tr><td>'+r[0]+'</td>'+cell(r[1])+cell(r[2])+'</tr>';
+  }).join('')+'</tbody></table></div>';
+  document.getElementById('compareResult').scrollIntoView({behavior:'smooth'});
+}
+
+/* ─── EXPORT / IMPORT ─── */
+function exportData(){
+  var user=currentUser?currentUser.username:'guest';
+  var out={exportedAt:new Date().toISOString(),user:user};
+  var keys=['plantifi_stats_','plantifi_chats_','plantifi_ach_','plantifi_garden_','plantifi_journal_','plantifi_notes_','plantifi_events_','plantifi_theme'];
+  keys.forEach(function(k){var v=localStorage.getItem(k+user);if(v)out[k+user]=JSON.parse(v)});
+  var comm=localStorage.getItem('plantifi_community');
+  if(comm)out['plantifi_community']=JSON.parse(comm);
+  var blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='plantifi_backup_'+user+'.json';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove()},500);
+  track('exports');
+  alert('\u0414\u0430\u043d\u043d\u044b\u0435 \u044d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u044b! \u0424\u0430\u0439\u043b plantifi_backup_'+user+'.json \u0441\u043a\u0430\u0447\u0430\u043d \ud83d\udce6');
+}
+function handleImport(e){
+  var file=e.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(){
+    try{
+      var data=JSON.parse(reader.result);
+      var backupUser=data.user||'guest';
+      var user=currentUser?currentUser.username:'guest';
+      var count=0;
+      Object.keys(data).forEach(function(k){
+        if(k.indexOf('plantifi_')!==0||k==='exportedAt'||k==='user')return;
+        var val;
+        if(k==='plantifi_community'||k==='plantifi_theme'){val=data[k]}
+        else if(k.indexOf('_'+backupUser)!==-1){k=k.replace(new RegExp('_'+backupUser+'$'),'_'+user);val=data[k]}
+        else return;
+        localStorage.setItem(k,typeof val==='string'?val:JSON.stringify(val));
+        count++;
+      });
+      alert('\u0418\u043c\u043f\u043e\u0440\u0442 \u0433\u043e\u0442\u043e\u0432 \u2713 \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u043e '+count+' \u043e\u0431\u043b\u0430\u0441\u0442\u0435\u0439 \u0434\u0430\u043d\u043d\u044b\u0445. \u041f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0430...');
+      setTimeout(function(){location.reload()},900);
+    }catch(err){alert('\u041d\u0435\u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043f\u0440\u043e\u0447\u0438\u0442\u0430\u0442\u044c \u0444\u0430\u0439\u043b: '+err.message);return}
+  };
+  reader.readAsText(file);
+}
